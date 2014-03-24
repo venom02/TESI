@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.Edificio" table="edificio" catalog="rigers">
+        <id name="idEdificio" type="int">
+            <column name="idEdificio" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="compartimento" class="com.rigers.db.Compartimento" fetch="select">
+            <column name="idCompartimento" not-null="true" />
+        </many-to-one>
+        <property name="indirizzoEdificio" type="string">
+            <column name="indirizzoEdificio" length="45" />
+        </property>
+        <set name="dispositivos" table="dispositivo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idEdificio" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.Dispositivo" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.Dispositivo" table="dispositivo" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.DispositivoId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="edificio" class="com.rigers.db.Edificio" update="false" insert="false" fetch="select">
+            <column name="idEdificio" not-null="true" />
+        </many-to-one>
+        <property name="nomeDispositivo" type="string">
+            <column name="NomeDispositivo" length="45" />
+        </property>
+        <one-to-one name="meterElettrico" class="com.rigers.db.MeterElettrico"></one-to-one>
+        <one-to-one name="meterSonde" class="com.rigers.db.MeterSonde"></one-to-one>
+        <one-to-one name="meterGas" class="com.rigers.db.MeterGas"></one-to-one>
+        <one-to-one name="meterTermie" class="com.rigers.db.MeterTermie"></one-to-one>
+        <set name="letturaDispositivos" table="lettura_dispositivo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idDispositivo" not-null="true" />
+                <column name="idEdificio" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.LetturaDispositivo" />
+        </set>
+        <one-to-one name="meterAcqua" class="com.rigers.db.MeterAcqua"></one-to-one>
+        <one-to-one name="meterRipartitoreCalore" class="com.rigers.db.MeterRipartitoreCalore"></one-to-one>
+    </class>
+</hibernate-mapping>

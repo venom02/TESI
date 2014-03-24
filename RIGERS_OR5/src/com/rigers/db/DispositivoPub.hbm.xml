@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.DispositivoPub" table="dispositivo_pub" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.DispositivoPubId">
+            <key-property name="idDispositivoPub" type="int">
+                <column name="idDispositivo_Pub" />
+            </key-property>
+            <key-property name="idCompartimento" type="int">
+                <column name="idCompartimento" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="compartimento" class="com.rigers.db.Compartimento" update="false" insert="false" fetch="select">
+            <column name="idCompartimento" not-null="true" />
+        </many-to-one>
+        <property name="nomeDispositivo" type="string">
+            <column name="NomeDispositivo" length="45" />
+        </property>
+        <set name="videosorveglianzas" table="videosorveglianza" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idDispositivo_Pub" not-null="true" />
+                <column name="idCompartimento" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.Videosorveglianza" />
+        </set>
+        <set name="letturaDispositivoPubs" table="lettura_dispositivo_pub" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idDispositivo_Pub" not-null="true" />
+                <column name="idCompartimento" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.LetturaDispositivoPub" />
+        </set>
+        <one-to-one name="illuminazionePub" class="com.rigers.db.IlluminazionePub"></one-to-one>
+    </class>
+</hibernate-mapping>

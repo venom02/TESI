@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.MeterSonde" table="meter_sonde" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.MeterSondeId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+        </composite-id>
+        <one-to-one name="dispositivo" class="com.rigers.db.Dispositivo" constrained="true"></one-to-one>
+        <property name="tempLocali" type="java.lang.Integer">
+            <column name="temp_locali" />
+        </property>
+        <property name="tempEsterna" type="java.lang.Integer">
+            <column name="temp_esterna" />
+        </property>
+        <property name="tempGiorno" type="java.lang.Integer">
+            <column name="temp_giorno" />
+        </property>
+        <property name="luminosita" type="java.lang.Integer">
+            <column name="luminosita" />
+        </property>
+        <property name="solarimetro" type="java.lang.Integer">
+            <column name="solarimetro" />
+        </property>
+        <property name="sismografo" type="java.lang.Integer">
+            <column name="sismografo" />
+        </property>
+    </class>
+</hibernate-mapping>

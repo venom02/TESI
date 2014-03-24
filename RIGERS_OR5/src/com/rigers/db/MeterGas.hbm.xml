@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.MeterGas" table="meter_gas" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.MeterGasId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+        </composite-id>
+        <one-to-one name="dispositivo" class="com.rigers.db.Dispositivo" constrained="true"></one-to-one>
+        <property name="pm1NetworkStatus" type="java.lang.Byte">
+            <column name="pm1_network_status" />
+        </property>
+        <property name="statoValvola" type="java.lang.Byte">
+            <column name="stato_valvola" />
+        </property>
+        <property name="comandoValvola" type="java.lang.Byte">
+            <column name="comando_valvola" />
+        </property>
+        <property name="unixTimeEogd" type="timestamp">
+            <column name="unix_time_eogd" length="19" />
+        </property>
+        <property name="dailyDiagnostic" type="string">
+            <column name="daily_diagnostic" length="45" />
+        </property>
+        <property name="totVbEogdF1" type="java.lang.Integer">
+            <column name="tot_vb_eogd_f1" />
+        </property>
+        <property name="totVbEogdF2" type="java.lang.Integer">
+            <column name="tot_vb_eogd_f2" />
+        </property>
+        <property name="totVbEogdF3" type="java.lang.Integer">
+            <column name="tot_vb_eogd_f3" />
+        </property>
+        <property name="totVaEogd" type="java.lang.Integer">
+            <column name="tot_va_eogd" />
+        </property>
+        <property name="qbcMax" type="java.lang.Integer">
+            <column name="qbc_max" />
+        </property>
+        <property name="qbcMaxTimestamp" type="timestamp">
+            <column name="qbc_max_timestamp" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

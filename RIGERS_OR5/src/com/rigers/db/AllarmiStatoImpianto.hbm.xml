@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.AllarmiStatoImpianto" table="allarmi_stato_impianto" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.AllarmiStatoImpiantoId">
+            <key-property name="idDispositivoPub" type="int">
+                <column name="idDispositivo_Pub" />
+            </key-property>
+            <key-property name="idCompartimento" type="int">
+                <column name="idCompartimento" />
+            </key-property>
+        </composite-id>
+        <one-to-one name="illuminazionePub" class="com.rigers.db.IlluminazionePub" constrained="true"></one-to-one>
+        <property name="statoInterrMagnetotermico" type="java.lang.Byte">
+            <column name="stato_interr_magnetotermico" />
+        </property>
+        <property name="statoDifferenzialeApparato" type="java.lang.Byte">
+            <column name="stato_differenziale_apparato" />
+        </property>
+        <property name="statoOnOff" type="java.lang.Byte">
+            <column name="stato_on_off" />
+        </property>
+        <property name="assenzaReteElettrica" type="java.lang.Byte">
+            <column name="assenza_rete_elettrica" />
+        </property>
+        <property name="mancatoOnTramonto" type="java.lang.Byte">
+            <column name="mancato_on_tramonto" />
+        </property>
+        <property name="mancatoOffAlba" type="java.lang.Byte">
+            <column name="mancato_off_alba" />
+        </property>
+        <property name="assorbimentoSopraSoglia" type="java.lang.Integer">
+            <column name="assorbimento_sopra_soglia" />
+        </property>
+        <property name="assorbimentoSottoSoglia" type="java.lang.Integer">
+            <column name="assorbimento_sotto_soglia" />
+        </property>
+        <property name="aperturaQuadroElettrico" type="java.lang.Byte">
+            <column name="apertura_quadro_elettrico" />
+        </property>
+        <property name="allarmeGuastoSingoloPunto" type="java.lang.Byte">
+            <column name="allarme_guasto_singolo_punto" />
+        </property>
+    </class>
+</hibernate-mapping>

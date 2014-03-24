@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.MeterElettrico" table="meter_elettrico" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.MeterElettricoId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+        </composite-id>
+        <one-to-one name="dispositivo" class="com.rigers.db.Dispositivo" constrained="true"></one-to-one>
+        <property name="totEAttivaF1" type="java.lang.Integer">
+            <column name="tot_E_attiva_F1" />
+        </property>
+        <property name="totEAttivaF2" type="java.lang.Integer">
+            <column name="tot_E_attiva_F2" />
+        </property>
+        <property name="totEAttivaF3" type="java.lang.Integer">
+            <column name="tot_E_attiva_F3" />
+        </property>
+        <property name="totEReattiva" type="java.lang.Integer">
+            <column name="tot_E_reattiva" />
+        </property>
+        <property name="energiaAttivaGiornaliera" type="java.lang.Integer">
+            <column name="energia_attiva_giornaliera" />
+        </property>
+        <property name="energiaReattivaGiornaliera" type="java.lang.Integer">
+            <column name="energia_reattiva_giornaliera" />
+        </property>
+        <property name="correnteFase1" type="java.lang.Integer">
+            <column name="corrente_fase_1" />
+        </property>
+        <property name="tensioneFase1" type="java.lang.Integer">
+            <column name="tensione_fase_1" />
+        </property>
+        <property name="cosphiFase1" type="java.lang.Integer">
+            <column name="cosphi_fase_1" />
+        </property>
+        <property name="correnteFase2" type="java.lang.Integer">
+            <column name="corrente_fase_2" />
+        </property>
+        <property name="tensioneFase2" type="java.lang.Integer">
+            <column name="tensione_fase_2" />
+        </property>
+        <property name="cosphiFase2" type="java.lang.Integer">
+            <column name="cosphi_fase_2" />
+        </property>
+        <property name="correnteFase3" type="java.lang.Integer">
+            <column name="corrente_fase_3" />
+        </property>
+        <property name="tensioneFase3" type="java.lang.Integer">
+            <column name="tensione_fase_3" />
+        </property>
+        <property name="cosphiFase3" type="java.lang.Integer">
+            <column name="cosphi_fase_3" />
+        </property>
+        <property name="thdFattDistorsione" type="java.lang.Integer">
+            <column name="THD_fatt_distorsione" />
+        </property>
+        <property name="potAttivaFase1" type="java.lang.Integer">
+            <column name="pot_attiva_fase1" />
+        </property>
+        <property name="potReattivaFase1" type="java.lang.Integer">
+            <column name="pot_reattiva_fase1" />
+        </property>
+        <property name="potApparenteFase1" type="java.lang.Integer">
+            <column name="pot_apparente_fase1" />
+        </property>
+        <property name="potAttivaFase2" type="java.lang.Integer">
+            <column name="pot_attiva_fase2" />
+        </property>
+        <property name="potReattivaFase2" type="java.lang.Integer">
+            <column name="pot_reattiva_fase2" />
+        </property>
+        <property name="potApparenteFase2" type="java.lang.Integer">
+            <column name="pot_apparente_fase2" />
+        </property>
+        <property name="potAttivaFase3" type="java.lang.Integer">
+            <column name="pot_attiva_fase3" />
+        </property>
+        <property name="potReattivaFase3" type="java.lang.Integer">
+            <column name="pot_reattiva_fase3" />
+        </property>
+        <property name="potApparenteFase3" type="java.lang.Integer">
+            <column name="pot_apparente_fase3" />
+        </property>
+    </class>
+</hibernate-mapping>

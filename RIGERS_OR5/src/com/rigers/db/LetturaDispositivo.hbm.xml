@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.LetturaDispositivo" table="lettura_dispositivo" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.LetturaDispositivoId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+            <key-property name="dataLettura" type="timestamp">
+                <column name="Data_Lettura" length="19" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="dispositivo" class="com.rigers.db.Dispositivo" update="false" insert="false" fetch="select">
+            <column name="idDispositivo" not-null="true" />
+            <column name="idEdificio" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

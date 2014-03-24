@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.MeterTermie" table="meter_termie" catalog="rigers">
+        <composite-id name="id" class="com.rigers.db.MeterTermieId">
+            <key-property name="idDispositivo" type="int">
+                <column name="idDispositivo" />
+            </key-property>
+            <key-property name="idEdificio" type="int">
+                <column name="idEdificio" />
+            </key-property>
+        </composite-id>
+        <one-to-one name="dispositivo" class="com.rigers.db.Dispositivo" constrained="true"></one-to-one>
+        <property name="currentDateTime" type="timestamp">
+            <column name="current_date_time" length="19" />
+        </property>
+        <property name="currentEnergy" type="java.lang.Integer">
+            <column name="current_energy" />
+        </property>
+        <property name="errorCode" type="java.lang.Integer">
+            <column name="error_code" />
+        </property>
+        <property name="currentTotalVolume" type="java.lang.Integer">
+            <column name="current_total_volume" />
+        </property>
+        <property name="currentFlow" type="java.lang.Integer">
+            <column name="current_flow" />
+        </property>
+        <property name="currentPerformance" type="java.lang.Integer">
+            <column name="current_performance" />
+        </property>
+        <property name="returnFlowTemperature" type="java.lang.Integer">
+            <column name="return_flow_temperature" />
+        </property>
+        <property name="temperatureDifference" type="java.lang.Integer">
+            <column name="temperature_difference" />
+        </property>
+        <property name="currentImpulseCount1" type="java.lang.Integer">
+            <column name="current_impulse_count1" />
+        </property>
+        <property name="currentImpulseCount2" type="java.lang.Integer">
+            <column name="current_impulse_count2" />
+        </property>
+    </class>
+</hibernate-mapping>

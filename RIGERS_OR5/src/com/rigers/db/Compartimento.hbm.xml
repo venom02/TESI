@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.rigers.db.Compartimento" table="compartimento" catalog="rigers">
+        <id name="idCompartimento" type="int">
+            <column name="idCompartimento" />
+            <generator class="assigned" />
+        </id>
+        <property name="nomeCompartimento" type="string">
+            <column name="NomeCompartimento" length="45" />
+        </property>
+        <set name="dispositivoPubs" table="dispositivo_pub" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idCompartimento" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.DispositivoPub" />
+        </set>
+        <set name="edificios" table="edificio" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idCompartimento" not-null="true" />
+            </key>
+            <one-to-many class="com.rigers.db.Edificio" />
+        </set>
+    </class>
+</hibernate-mapping>

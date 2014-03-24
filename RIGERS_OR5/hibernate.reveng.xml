@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="rigers" match-name="allarmi_stato_impianto"/>
+  <table-filter match-catalog="rigers" match-name="compartimento"/>
+  <table-filter match-catalog="rigers" match-name="dispositivo"/>
+  <table-filter match-catalog="rigers" match-name="dispositivo_pub"/>
+  <table-filter match-catalog="rigers" match-name="edificio"/>
+  <table-filter match-catalog="rigers" match-name="illuminazione_pub"/>
+  <table-filter match-catalog="rigers" match-name="lettura_dispositivo"/>
+  <table-filter match-catalog="rigers" match-name="lettura_dispositivo_pub"/>
+  <table-filter match-catalog="rigers" match-name="meter_acqua"/>
+  <table-filter match-catalog="rigers" match-name="meter_elettrico"/>
+  <table-filter match-catalog="rigers" match-name="meter_gas"/>
+  <table-filter match-catalog="rigers" match-name="meter_ripartitore_calore"/>
+  <table-filter match-catalog="rigers" match-name="meter_sonde"/>
+  <table-filter match-catalog="rigers" match-name="meter_termie"/>
+  <table-filter match-catalog="rigers" match-name="parametri_elettrici"/>
+  <table-filter match-catalog="rigers" match-name="telecontrollo"/>
+  <table-filter match-catalog="rigers" match-name="videosorveglianza"/>
+</hibernate-reverse-engineering>
