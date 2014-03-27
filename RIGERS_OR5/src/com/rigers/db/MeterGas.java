@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 public class MeterGas implements java.io.Serializable {
 
 	private MeterGasId id;
-	private Dispositivo dispositivo;
+	private LetturaDispositivo letturaDispositivo;
 	private Byte pm1NetworkStatus;
 	private Byte statoValvola;
 	private Byte comandoValvola;
@@ -26,16 +26,16 @@ public class MeterGas implements java.io.Serializable {
 	public MeterGas() {
 	}
 
-	public MeterGas(Dispositivo dispositivo) {
-		this.dispositivo = dispositivo;
+	public MeterGas(LetturaDispositivo letturaDispositivo) {
+		this.letturaDispositivo = letturaDispositivo;
 	}
 
-	public MeterGas(Dispositivo dispositivo, Byte pm1NetworkStatus,
-			Byte statoValvola, Byte comandoValvola, Date unixTimeEogd,
-			String dailyDiagnostic, Integer totVbEogdF1, Integer totVbEogdF2,
-			Integer totVbEogdF3, Integer totVaEogd, Integer qbcMax,
-			Date qbcMaxTimestamp) {
-		this.dispositivo = dispositivo;
+	public MeterGas(LetturaDispositivo letturaDispositivo,
+			Byte pm1NetworkStatus, Byte statoValvola, Byte comandoValvola,
+			Date unixTimeEogd, String dailyDiagnostic, Integer totVbEogdF1,
+			Integer totVbEogdF2, Integer totVbEogdF3, Integer totVaEogd,
+			Integer qbcMax, Date qbcMaxTimestamp) {
+		this.letturaDispositivo = letturaDispositivo;
 		this.pm1NetworkStatus = pm1NetworkStatus;
 		this.statoValvola = statoValvola;
 		this.comandoValvola = comandoValvola;
@@ -57,12 +57,12 @@ public class MeterGas implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Dispositivo getDispositivo() {
-		return this.dispositivo;
+	public LetturaDispositivo getLetturaDispositivo() {
+		return this.letturaDispositivo;
 	}
 
-	public void setDispositivo(Dispositivo dispositivo) {
-		this.dispositivo = dispositivo;
+	public void setLetturaDispositivo(LetturaDispositivo letturaDispositivo) {
+		this.letturaDispositivo = letturaDispositivo;
 	}
 
 	public Byte getPm1NetworkStatus() {

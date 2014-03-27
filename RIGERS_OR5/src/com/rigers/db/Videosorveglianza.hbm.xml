@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.Videosorveglianza" table="videosorveglianza" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.VideosorveglianzaId">
             <key-property name="idVideosorveglianza" type="int">
                 <column name="idVideosorveglianza" />
+            </key-property>
+            <key-property name="dataLetturaPub" type="timestamp">
+                <column name="Data_Lettura_Pub" length="19" />
             </key-property>
             <key-property name="idDispositivoPub" type="int">
                 <column name="idDispositivo_Pub" />
@@ -15,7 +18,8 @@
                 <column name="idCompartimento" />
             </key-property>
         </composite-id>
-        <many-to-one name="dispositivoPub" class="com.rigers.db.DispositivoPub" update="false" insert="false" fetch="select">
+        <many-to-one name="letturaDispositivoPub" class="com.rigers.db.LetturaDispositivoPub" update="false" insert="false" fetch="select">
+            <column name="Data_Lettura_Pub" length="19" not-null="true" />
             <column name="idDispositivo_Pub" not-null="true" />
             <column name="idCompartimento" not-null="true" />
         </many-to-one>

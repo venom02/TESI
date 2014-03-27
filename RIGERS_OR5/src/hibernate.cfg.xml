@@ -23,7 +23,6 @@
 		<mapping resource="com/rigers/db/LetturaDispositivo.hbm.xml" />
 		<mapping resource="com/rigers/db/LetturaDispositivoPub.hbm.xml" />
 		<mapping resource="com/rigers/db/Videosorveglianza.hbm.xml" />
-		<mapping resource="com/rigers/db/IlluminazionePub.hbm.xml" />
 		<mapping resource="com/rigers/db/MeterAcqua.hbm.xml" />
 		<mapping resource="com/rigers/db/MeterElettrico.hbm.xml" />
 		<mapping resource="com/rigers/db/MeterGas.hbm.xml" />

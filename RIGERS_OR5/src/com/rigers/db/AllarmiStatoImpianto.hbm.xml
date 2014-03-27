@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.AllarmiStatoImpianto" table="allarmi_stato_impianto" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.AllarmiStatoImpiantoId">
+            <key-property name="dataLetturaPub" type="timestamp">
+                <column name="Data_Lettura_Pub" length="19" />
+            </key-property>
             <key-property name="idDispositivoPub" type="int">
                 <column name="idDispositivo_Pub" />
             </key-property>
@@ -12,7 +15,7 @@
                 <column name="idCompartimento" />
             </key-property>
         </composite-id>
-        <one-to-one name="illuminazionePub" class="com.rigers.db.IlluminazionePub" constrained="true"></one-to-one>
+        <one-to-one name="letturaDispositivoPub" class="com.rigers.db.LetturaDispositivoPub" constrained="true"></one-to-one>
         <property name="statoInterrMagnetotermico" type="java.lang.Byte">
             <column name="stato_interr_magnetotermico" />
         </property>

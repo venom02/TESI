@@ -81,7 +81,7 @@ public class DbManager {
 			Edificio edificio = new Edificio();
 			edificio.setIdEdificio(sack.get(i));
 			edificio.setCompartimento(compList.get(i));
-			edificio.setIndirizzoEdificio("Via " + i + " Number " + sack.get(i));
+			edificio.setIndirizzo("Via " + i + " Number " + sack.get(i));
 			session.save(edificio);
 		}
 
