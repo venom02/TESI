@@ -191,7 +191,6 @@ public class DbManager {
 		q.executeUpdate();
 
 	}
-	
 
 	/**
 	 * Genera 20 edifici random
