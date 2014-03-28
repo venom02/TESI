@@ -7,7 +7,6 @@
   <table-filter match-catalog="rigers" match-name="dispositivo"/>
   <table-filter match-catalog="rigers" match-name="dispositivo_pub"/>
   <table-filter match-catalog="rigers" match-name="edificio"/>
-  <table-filter match-catalog="rigers" match-name="illuminazione_pub"/>
   <table-filter match-catalog="rigers" match-name="lettura_dispositivo"/>
   <table-filter match-catalog="rigers" match-name="lettura_dispositivo_pub"/>
   <table-filter match-catalog="rigers" match-name="meter_acqua"/>

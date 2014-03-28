@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 public class MeterTermie implements java.io.Serializable {
 
 	private MeterTermieId id;
-	private Dispositivo dispositivo;
+	private LetturaDispositivo letturaDispositivo;
 	private Date currentDateTime;
 	private Integer currentEnergy;
 	private Integer errorCode;
@@ -25,17 +25,17 @@ public class MeterTermie implements java.io.Serializable {
 	public MeterTermie() {
 	}
 
-	public MeterTermie(Dispositivo dispositivo) {
-		this.dispositivo = dispositivo;
+	public MeterTermie(LetturaDispositivo letturaDispositivo) {
+		this.letturaDispositivo = letturaDispositivo;
 	}
 
-	public MeterTermie(Dispositivo dispositivo, Date currentDateTime,
-			Integer currentEnergy, Integer errorCode,
+	public MeterTermie(LetturaDispositivo letturaDispositivo,
+			Date currentDateTime, Integer currentEnergy, Integer errorCode,
 			Integer currentTotalVolume, Integer currentFlow,
 			Integer currentPerformance, Integer returnFlowTemperature,
 			Integer temperatureDifference, Integer currentImpulseCount1,
 			Integer currentImpulseCount2) {
-		this.dispositivo = dispositivo;
+		this.letturaDispositivo = letturaDispositivo;
 		this.currentDateTime = currentDateTime;
 		this.currentEnergy = currentEnergy;
 		this.errorCode = errorCode;
@@ -56,12 +56,12 @@ public class MeterTermie implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Dispositivo getDispositivo() {
-		return this.dispositivo;
+	public LetturaDispositivo getLetturaDispositivo() {
+		return this.letturaDispositivo;
 	}
 
-	public void setDispositivo(Dispositivo dispositivo) {
-		this.dispositivo = dispositivo;
+	public void setLetturaDispositivo(LetturaDispositivo letturaDispositivo) {
+		this.letturaDispositivo = letturaDispositivo;
 	}
 
 	public Date getCurrentDateTime() {

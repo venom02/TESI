@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +13,7 @@ public class Dispositivo implements java.io.Serializable {
 	private DispositivoId id;
 	private Edificio edificio;
 	private String nomeDispositivo;
-	private MeterElettrico meterElettrico;
-	private MeterSonde meterSonde;
-	private MeterGas meterGas;
-	private MeterTermie meterTermie;
 	private Set letturaDispositivos = new HashSet(0);
-	private MeterAcqua meterAcqua;
-	private MeterRipartitoreCalore meterRipartitoreCalore;
 
 	public Dispositivo() {
 	}
@@ -30,20 +24,11 @@ public class Dispositivo implements java.io.Serializable {
 	}
 
 	public Dispositivo(DispositivoId id, Edificio edificio,
-			String nomeDispositivo, MeterElettrico meterElettrico,
-			MeterSonde meterSonde, MeterGas meterGas, MeterTermie meterTermie,
-			Set letturaDispositivos, MeterAcqua meterAcqua,
-			MeterRipartitoreCalore meterRipartitoreCalore) {
+			String nomeDispositivo, Set letturaDispositivos) {
 		this.id = id;
 		this.edificio = edificio;
 		this.nomeDispositivo = nomeDispositivo;
-		this.meterElettrico = meterElettrico;
-		this.meterSonde = meterSonde;
-		this.meterGas = meterGas;
-		this.meterTermie = meterTermie;
 		this.letturaDispositivos = letturaDispositivos;
-		this.meterAcqua = meterAcqua;
-		this.meterRipartitoreCalore = meterRipartitoreCalore;
 	}
 
 	public DispositivoId getId() {
@@ -70,61 +55,12 @@ public class Dispositivo implements java.io.Serializable {
 		this.nomeDispositivo = nomeDispositivo;
 	}
 
-	public MeterElettrico getMeterElettrico() {
-		return this.meterElettrico;
-	}
-
-	public void setMeterElettrico(MeterElettrico meterElettrico) {
-		this.meterElettrico = meterElettrico;
-	}
-
-	public MeterSonde getMeterSonde() {
-		return this.meterSonde;
-	}
-
-	public void setMeterSonde(MeterSonde meterSonde) {
-		this.meterSonde = meterSonde;
-	}
-
-	public MeterGas getMeterGas() {
-		return this.meterGas;
-	}
-
-	public void setMeterGas(MeterGas meterGas) {
-		this.meterGas = meterGas;
-	}
-
-	public MeterTermie getMeterTermie() {
-		return this.meterTermie;
-	}
-
-	public void setMeterTermie(MeterTermie meterTermie) {
-		this.meterTermie = meterTermie;
-	}
-
 	public Set getLetturaDispositivos() {
 		return this.letturaDispositivos;
 	}
 
 	public void setLetturaDispositivos(Set letturaDispositivos) {
 		this.letturaDispositivos = letturaDispositivos;
-	}
-
-	public MeterAcqua getMeterAcqua() {
-		return this.meterAcqua;
-	}
-
-	public void setMeterAcqua(MeterAcqua meterAcqua) {
-		this.meterAcqua = meterAcqua;
-	}
-
-	public MeterRipartitoreCalore getMeterRipartitoreCalore() {
-		return this.meterRipartitoreCalore;
-	}
-
-	public void setMeterRipartitoreCalore(
-			MeterRipartitoreCalore meterRipartitoreCalore) {
-		this.meterRipartitoreCalore = meterRipartitoreCalore;
 	}
 
 }

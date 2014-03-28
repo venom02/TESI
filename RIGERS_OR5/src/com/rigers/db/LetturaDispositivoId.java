@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -9,17 +9,25 @@ import java.util.Date;
  */
 public class LetturaDispositivoId implements java.io.Serializable {
 
+	private Date dataLettura;
 	private int idDispositivo;
 	private int idEdificio;
-	private Date dataLettura;
 
 	public LetturaDispositivoId() {
 	}
 
-	public LetturaDispositivoId(int idDispositivo, int idEdificio,
-			Date dataLettura) {
+	public LetturaDispositivoId(Date dataLettura, int idDispositivo,
+			int idEdificio) {
+		this.dataLettura = dataLettura;
 		this.idDispositivo = idDispositivo;
 		this.idEdificio = idEdificio;
+	}
+
+	public Date getDataLettura() {
+		return this.dataLettura;
+	}
+
+	public void setDataLettura(Date dataLettura) {
 		this.dataLettura = dataLettura;
 	}
 
@@ -39,14 +47,6 @@ public class LetturaDispositivoId implements java.io.Serializable {
 		this.idEdificio = idEdificio;
 	}
 
-	public Date getDataLettura() {
-		return this.dataLettura;
-	}
-
-	public void setDataLettura(Date dataLettura) {
-		this.dataLettura = dataLettura;
-	}
-
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -56,23 +56,22 @@ public class LetturaDispositivoId implements java.io.Serializable {
 			return false;
 		LetturaDispositivoId castOther = (LetturaDispositivoId) other;
 
-		return (this.getIdDispositivo() == castOther.getIdDispositivo())
-				&& (this.getIdEdificio() == castOther.getIdEdificio())
-				&& ((this.getDataLettura() == castOther.getDataLettura()) || (this
-						.getDataLettura() != null
-						&& castOther.getDataLettura() != null && this
-						.getDataLettura().equals(castOther.getDataLettura())));
+		return ((this.getDataLettura() == castOther.getDataLettura()) || (this
+				.getDataLettura() != null && castOther.getDataLettura() != null && this
+				.getDataLettura().equals(castOther.getDataLettura())))
+				&& (this.getIdDispositivo() == castOther.getIdDispositivo())
+				&& (this.getIdEdificio() == castOther.getIdEdificio());
 	}
 
 	public int hashCode() {
 		int result = 17;
 
-		result = 37 * result + this.getIdDispositivo();
-		result = 37 * result + this.getIdEdificio();
 		result = 37
 				* result
 				+ (getDataLettura() == null ? 0 : this.getDataLettura()
 						.hashCode());
+		result = 37 * result + this.getIdDispositivo();
+		result = 37 * result + this.getIdEdificio();
 		return result;
 	}
 

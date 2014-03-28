@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.MeterSonde" table="meter_sonde" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.MeterSondeId">
+            <key-property name="dataLettura" type="timestamp">
+                <column name="Data_Lettura" length="19" />
+            </key-property>
             <key-property name="idDispositivo" type="int">
                 <column name="idDispositivo" />
             </key-property>
@@ -12,7 +15,7 @@
                 <column name="idEdificio" />
             </key-property>
         </composite-id>
-        <one-to-one name="dispositivo" class="com.rigers.db.Dispositivo" constrained="true"></one-to-one>
+        <one-to-one name="letturaDispositivo" class="com.rigers.db.LetturaDispositivo" constrained="true"></one-to-one>
         <property name="tempLocali" type="java.lang.Integer">
             <column name="temp_locali" />
         </property>

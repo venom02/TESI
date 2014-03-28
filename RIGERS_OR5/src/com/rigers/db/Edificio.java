@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ public class Edificio implements java.io.Serializable {
 
 	private int idEdificio;
 	private Compartimento compartimento;
-	private String indirizzoEdificio;
+	private String indirizzo;
 	private Set dispositivos = new HashSet(0);
 
 	public Edificio() {
@@ -24,10 +24,10 @@ public class Edificio implements java.io.Serializable {
 	}
 
 	public Edificio(int idEdificio, Compartimento compartimento,
-			String indirizzoEdificio, Set dispositivos) {
+			String indirizzo, Set dispositivos) {
 		this.idEdificio = idEdificio;
 		this.compartimento = compartimento;
-		this.indirizzoEdificio = indirizzoEdificio;
+		this.indirizzo = indirizzo;
 		this.dispositivos = dispositivos;
 	}
 
@@ -47,12 +47,12 @@ public class Edificio implements java.io.Serializable {
 		this.compartimento = compartimento;
 	}
 
-	public String getIndirizzoEdificio() {
-		return this.indirizzoEdificio;
+	public String getIndirizzo() {
+		return this.indirizzo;
 	}
 
-	public void setIndirizzoEdificio(String indirizzoEdificio) {
-		this.indirizzoEdificio = indirizzoEdificio;
+	public void setIndirizzo(String indirizzo) {
+		this.indirizzo = indirizzo;
 	}
 
 	public Set getDispositivos() {

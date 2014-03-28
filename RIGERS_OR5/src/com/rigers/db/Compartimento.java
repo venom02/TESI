@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 24-mar-2014 14.44.56 by Hibernate Tools 3.4.0.CR1
+// Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
