@@ -1,5 +1,7 @@
 package com.rigers.main;
 
+import java.util.List;
+
 import com.rigers.GUI.*;
 import com.rigers.GUI.main.GUI;
 
@@ -14,13 +16,10 @@ import com.rigers.persistence.HibernateUtil;
 public class Main {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		// DbManager.fillDb();
 
-		//DbManager.fillDb();
-		
-		String idCompartimento = "4";
-		String nomeCompartimento = "babau";
-		
-		DataInsert.insertComp(idCompartimento, nomeCompartimento);
-		//GUI.main(null);	
+		// GUI.main(null);
 	}
 }

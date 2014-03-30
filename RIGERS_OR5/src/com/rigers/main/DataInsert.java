@@ -9,25 +9,34 @@ import com.rigers.persistence.HibernateUtil;
 
 public class DataInsert {
 
-	public static boolean insertComp(String idCompartimento, String nomeCompartimento){
+	/**
+	 * Inserisce nel database un Compartimento
+	 * 
+	 * @param idCompartimento
+	 *            String per ottimizzare l'inserimento tramite elemento Spinner.
+	 * @param nomeCompartimento
+	 * @return Boolean. ritorna true se l'inserimento è andato a buon fine.
+	 */
+	public static boolean insertComp(String idCompartimento,
+			String nomeCompartimento) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		
+
 		int value = Integer.parseInt(idCompartimento);
-		
+
 		List<Compartimento> compList = session
 				.createQuery("from Compartimento").list();
-		
-		for(int i=0; i<compList.size(); i++){
+
+		for (int i = 0; i < compList.size(); i++) {
 			System.out.println(compList.get(i).getIdCompartimento());
 			Boolean compare = compList.get(i).getIdCompartimento() == value;
-			if(compare){
+			if (compare) {
 				System.out.print(compare);
-				session.getTransaction().commit();
+				session.getTransaction().rollback();
 				return false;
 			}
 		}
-		
+
 		Compartimento comp = new Compartimento();
 		comp.setIdCompartimento(value);
 		comp.setNomeCompartimento(nomeCompartimento);
@@ -35,4 +44,36 @@ public class DataInsert {
 		session.getTransaction().commit();
 		return true;
 	}
+
+	public static boolean insertEdificio(Session session, String idEdificio, String idCompartimento, String indirizzo) {
+		session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+
+		/**
+		 * Check esistenza IdEdificio
+		 */
+		int idEdifInt = Integer.parseInt(idEdificio);
+		List<Edificio> ediList = session.createQuery("from Edificio").list();
+		
+		for(int i = 0; i<ediList.size(); i++){
+			Boolean compare = ediList.get(i).getIdEdificio() == idEdifInt;
+			if (compare) {
+				System.out.print("idEdificio already existing");
+				session.getTransaction().rollback();
+				return false;
+			}
+		}
+		
+		Edificio edificio = new Edificio();
+		edificio.setIdEdificio(idEdifInt);
+		edificio.setIndirizzo(indirizzo);
+		
+		Compartimento compartimento = new Compartimento(Integer.parseInt(idCompartimento));
+		edificio.setCompartimento(compartimento);
+		
+		session.save(edificio);
+		session.getTransaction().commit();
+		return true;
+	}
+
 }

@@ -36,8 +36,11 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.hibernate.Session;
 
+import com.rigers.db.Compartimento;
 import com.rigers.main.DataInsert;
+import com.rigers.persistence.HibernateUtil;
 
 public class GUI {
 	private static class ContentProvider implements IStructuredContentProvider {
@@ -109,6 +112,9 @@ public class GUI {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		
+		
 		shlRigers = new Shell();
 		shlRigers.setMinimumSize(new Point(700, 200));
 		shlRigers.setSize(717, 552);
@@ -183,19 +189,23 @@ public class GUI {
 
 		final int RANGE = 20;
 		final List<Integer> sack = new ArrayList<>(RANGE);
-
+		
+		/**
+		 * Bottone inserimento Compartimento
+		 */
 		Button btnInsertComp = new Button(grpCompartimento, SWT.NONE);
 		btnInsertComp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(!DataInsert.insertComp(spinnerCompId.getText(), txtCompartimento.getText())){
-					lblCompInsert.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_RED));
-					lblCompInsert.setText("NO");
-				} else {
+				if(DataInsert.insertComp(spinnerCompId.getText(), txtCompartimento.getText())){
 					lblCompInsert.setForeground(SWTResourceManager
 							.getColor(SWT.COLOR_DARK_GREEN));
 					lblCompInsert.setText("OK");
 					System.out.println("success!");
+				} else {
+					lblCompInsert.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_RED));
+					lblCompInsert.setText("NO");
+					System.out.println("fail!");
 				}
 			}
 		});
@@ -222,6 +232,17 @@ public class GUI {
 		lblCompartimento.setText("Compartimento");
 
 		Combo combo = new Combo(grpEdificio_1, SWT.NONE);
+	
+		session.beginTransaction();
+		List compList = session.createQuery(
+				"select c.idCompartimento from Compartimento c").list();
+		String[] items = new String[compList.size()];
+		for(int i = 0; i<compList.size(); i++){
+			items[i] = compList.get(i).toString();
+			System.out.println(items[i]);
+		}
+
+		
 		combo.setItems(new String[] { "Comp1", "Comp2", "Comp3" });
 
 		Label lblIndirizzo = new Label(grpEdificio_1, SWT.NONE);
@@ -239,10 +260,13 @@ public class GUI {
 		lblOk.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
 		lblOk.setText("OK");
 
-		Button btnInsert_1 = new Button(grpEdificio_1, SWT.NONE);
-		btnInsert_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		/**
+		 * Inserimento Edificio 
+		 */
+		Button btnInsertEdificio = new Button(grpEdificio_1, SWT.NONE);
+		btnInsertEdificio.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		btnInsert_1.setText("INSERT");
+		btnInsertEdificio.setText("INSERT");
 
 		Group grpLettura = new Group(composite_1, SWT.NONE);
 		grpLettura.setLayout(new GridLayout(6, false));
