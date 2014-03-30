@@ -16,10 +16,6 @@ import com.rigers.persistence.HibernateUtil;
 public class Main {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		// DbManager.fillDb();
-
-		// GUI.main(null);
+		GUI.main(null);
 	}
 }

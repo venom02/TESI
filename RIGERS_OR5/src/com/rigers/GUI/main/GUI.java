@@ -231,19 +231,20 @@ public class GUI {
 		Label lblCompartimento = new Label(grpEdificio_1, SWT.NONE);
 		lblCompartimento.setText("Compartimento");
 
-		Combo combo = new Combo(grpEdificio_1, SWT.NONE);
+		
+		/**
+		 * Combo inserimento id Compartrimento in Edificio
+		 */
+		Combo comboEdifIdComp = new Combo(grpEdificio_1, SWT.NONE);
 	
 		session.beginTransaction();
 		List compList = session.createQuery(
 				"select c.idCompartimento from Compartimento c").list();
-		String[] items = new String[compList.size()];
+		String[] itemsIdComp = new String[compList.size()];
 		for(int i = 0; i<compList.size(); i++){
-			items[i] = compList.get(i).toString();
-			System.out.println(items[i]);
-		}
-
-		
-		combo.setItems(new String[] { "Comp1", "Comp2", "Comp3" });
+			itemsIdComp[i] = compList.get(i).toString();
+		}		
+		comboEdifIdComp.setItems(itemsIdComp);
 
 		Label lblIndirizzo = new Label(grpEdificio_1, SWT.NONE);
 		lblIndirizzo.setText("Indirizzo");
