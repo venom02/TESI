@@ -15,7 +15,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -33,14 +32,8 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.hibernate.Session;
 
-import com.rigers.db.Compartimento;
-import com.rigers.main.DataInsert;
-import com.rigers.persistence.HibernateUtil;
+import com.rigers.main.*;
 
 public class GUI {
 	private static class ContentProvider implements IStructuredContentProvider {
@@ -57,7 +50,7 @@ public class GUI {
 
 	protected Shell shlRigers;
 	private Text txtCompartimento;
-	private Text text;
+	private Text textIndirizzoEdificio;
 	private Table table;
 	private Text text_1;
 	private Text text_2;
@@ -78,6 +71,9 @@ public class GUI {
 	private Text text_7;
 	private Text text_8;
 	private Text text_9;
+	private Spinner spinnerIdEdificio;
+	private Combo comboIdCompartimento;
+	private Label lblEdifInsert;
 
 	/**
 	 * Launch the application.
@@ -112,9 +108,7 @@ public class GUI {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		
-		
+
 		shlRigers = new Shell();
 		shlRigers.setMinimumSize(new Point(700, 200));
 		shlRigers.setSize(717, 552);
@@ -189,7 +183,7 @@ public class GUI {
 
 		final int RANGE = 20;
 		final List<Integer> sack = new ArrayList<>(RANGE);
-		
+
 		/**
 		 * Bottone inserimento Compartimento
 		 */
@@ -197,13 +191,15 @@ public class GUI {
 		btnInsertComp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(DataInsert.insertComp(spinnerCompId.getText(), txtCompartimento.getText())){
+				if (DataInsert.insertComp(spinnerCompId.getText(),
+						txtCompartimento.getText())) {
 					lblCompInsert.setForeground(SWTResourceManager
 							.getColor(SWT.COLOR_DARK_GREEN));
 					lblCompInsert.setText("OK");
 					System.out.println("success!");
 				} else {
-					lblCompInsert.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_RED));
+					lblCompInsert.setForeground(SWTResourceManager
+							.getColor(SWT.COLOR_DARK_RED));
 					lblCompInsert.setText("NO");
 					System.out.println("fail!");
 				}
@@ -222,51 +218,60 @@ public class GUI {
 		Label lblId_1 = new Label(grpEdificio_1, SWT.NONE);
 		lblId_1.setText("ID");
 
-		Spinner spinner_1 = new Spinner(grpEdificio_1, SWT.BORDER);
+		spinnerIdEdificio = new Spinner(grpEdificio_1, SWT.BORDER);
 		GridData gd_spinner_1 = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
 		gd_spinner_1.widthHint = 20;
-		spinner_1.setLayoutData(gd_spinner_1);
+		spinnerIdEdificio.setLayoutData(gd_spinner_1);
 
 		Label lblCompartimento = new Label(grpEdificio_1, SWT.NONE);
 		lblCompartimento.setText("Compartimento");
 
+		comboIdCompartimento = new Combo(grpEdificio_1, SWT.NONE);
+
 		
-		/**
-		 * Combo inserimento id Compartrimento in Edificio
-		 */
-		Combo comboEdifIdComp = new Combo(grpEdificio_1, SWT.NONE);
-	
-		session.beginTransaction();
-		List compList = session.createQuery(
-				"select c.idCompartimento from Compartimento c").list();
-		String[] itemsIdComp = new String[compList.size()];
-		for(int i = 0; i<compList.size(); i++){
-			itemsIdComp[i] = compList.get(i).toString();
-		}		
-		comboEdifIdComp.setItems(itemsIdComp);
+		comboIdCompartimento.setItems(DataView.CompIdItems());
 
 		Label lblIndirizzo = new Label(grpEdificio_1, SWT.NONE);
 		lblIndirizzo.setText("Indirizzo");
 
-		text = new Text(grpEdificio_1, SWT.BORDER);
+		textIndirizzoEdificio = new Text(grpEdificio_1, SWT.BORDER);
 		GridData gd_text = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,
 				1);
 		gd_text.widthHint = 240;
-		text.setLayoutData(gd_text);
+		textIndirizzoEdificio.setLayoutData(gd_text);
 
-		Label lblOk = new Label(grpEdificio_1, SWT.NONE);
-		lblOk.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1,
-				1));
-		lblOk.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
-		lblOk.setText("OK");
+		lblEdifInsert = new Label(grpEdificio_1, SWT.NONE);
+		lblEdifInsert.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
+				false, 1, 1));
+		lblEdifInsert.setForeground(SWTResourceManager
+				.getColor(SWT.COLOR_DARK_GREEN));
+		lblEdifInsert.setText("OK");
 
 		/**
-		 * Inserimento Edificio 
+		 * Bottone Inserimento Edificio
 		 */
 		Button btnInsertEdificio = new Button(grpEdificio_1, SWT.NONE);
-		btnInsertEdificio.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		btnInsertEdificio.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (DataInsert.insertEdificio(spinnerIdEdificio.getText(),
+						comboIdCompartimento.getText(),
+						textIndirizzoEdificio.getText())) {
+					lblEdifInsert.setForeground(SWTResourceManager
+							.getColor(SWT.COLOR_DARK_GREEN));
+					lblEdifInsert.setText("OK");
+					System.out.println("success!");
+				} else {
+					lblEdifInsert.setForeground(SWTResourceManager
+							.getColor(SWT.COLOR_DARK_RED));
+					lblEdifInsert.setText("NO");
+					System.out.println("fail!");
+				}
+			}
+		});
+		btnInsertEdificio.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
 		btnInsertEdificio.setText("INSERT");
 
 		Group grpLettura = new Group(composite_1, SWT.NONE);
@@ -281,8 +286,8 @@ public class GUI {
 		lblEdificio_1.setText("Compartimento");
 
 		Combo comboCompInsert = new Combo(grpLettura, SWT.NONE);
-		comboCompInsert.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
-				1, 1));
+		comboCompInsert.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
 
 		Label lblEdificio_2 = new Label(grpLettura, SWT.NONE);
 		lblEdificio_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -290,8 +295,8 @@ public class GUI {
 		lblEdificio_2.setText("Edificio");
 
 		Combo comboEdifInsert = new Combo(grpLettura, SWT.NONE);
-		GridData gd_comboEdifInsert = new GridData(SWT.FILL, SWT.CENTER, false, false,
-				1, 1);
+		GridData gd_comboEdifInsert = new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1);
 		gd_comboEdifInsert.widthHint = 100;
 		comboEdifInsert.setLayoutData(gd_comboEdifInsert);
 
@@ -302,11 +307,12 @@ public class GUI {
 
 		final Combo comboDispInsert = new Combo(grpLettura, SWT.NONE);
 
-		comboDispInsert.setItems(new String[] { "Meter Acqua", "Meter Elettrico",
-				"Meter Gas", "Meter Termie", "Meter Ripartitore Calore",
-		"Meter Sonde" });
-		
-		comboDispInsert.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,1, 1));
+		comboDispInsert.setItems(new String[] { "Meter Acqua",
+				"Meter Elettrico", "Meter Gas", "Meter Termie",
+				"Meter Ripartitore Calore", "Meter Sonde" });
+
+		comboDispInsert.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
 		comboDispInsert.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -347,7 +353,7 @@ public class GUI {
 		new Label(grpLettura, SWT.NONE);
 		new Label(grpLettura, SWT.NONE);
 		new Label(grpLettura, SWT.NONE);
-		
+
 		/**
 		 * Composite delle diverse finestre di inserimento
 		 */
@@ -358,7 +364,7 @@ public class GUI {
 				true, 1, 1));
 
 		Composite blankcomp = new Composite(compositeDevices, SWT.NONE);
-		
+
 		// -- Meter Acqua
 		grpMeterAcqua = new Group(compositeDevices, SWT.NONE);
 		grpMeterAcqua.setText("Meter Acqua");
@@ -398,18 +404,18 @@ public class GUI {
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
-		
-				Label lblOk_1 = new Label(grpMeterAcqua, SWT.NONE);
-				lblOk_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
-						1, 1));
-				lblOk_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
-				lblOk_1.setText("OK");
-				
-						Button btnInsert_2 = new Button(grpMeterAcqua, SWT.NONE);
-						btnInsert_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-								false, 1, 1));
-						btnInsert_2.setText("INSERT");
-		
+
+		Label lblOk_1 = new Label(grpMeterAcqua, SWT.NONE);
+		lblOk_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
+				1, 1));
+		lblOk_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
+		lblOk_1.setText("OK");
+
+		Button btnInsert_2 = new Button(grpMeterAcqua, SWT.NONE);
+		btnInsert_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		btnInsert_2.setText("INSERT");
+
 		// -- Meter Elettrico
 		grpMeterElettrico = new Group(compositeDevices, SWT.NONE);
 		grpMeterElettrico.setText("Meter Elettrico");
@@ -419,11 +425,11 @@ public class GUI {
 		grpMeterRipartitoreCalore = new Group(compositeDevices, SWT.NONE);
 		grpMeterRipartitoreCalore.setText("Meter Ripartitore Calore");
 		grpMeterRipartitoreCalore.setLayout(new GridLayout(5, false));
-		
-				Label lblUnitConsumo = new Label(grpMeterRipartitoreCalore, SWT.NONE);
-				lblUnitConsumo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-						false, 1, 1));
-				lblUnitConsumo.setText("Unita\u00A0 Consumo");
+
+		Label lblUnitConsumo = new Label(grpMeterRipartitoreCalore, SWT.NONE);
+		lblUnitConsumo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblUnitConsumo.setText("Unita\u00A0 Consumo");
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 
 		text_3 = new Text(grpMeterRipartitoreCalore, SWT.BORDER);
@@ -442,80 +448,87 @@ public class GUI {
 				1, 1));
 		lblOk_2.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
 		lblOk_2.setText("OK");
-		
-				Button btnInsert_3 = new Button(grpMeterRipartitoreCalore, SWT.NONE);
-				btnInsert_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-						false, 1, 1));
-				btnInsert_3.setText("INSERT");
-		
+
+		Button btnInsert_3 = new Button(grpMeterRipartitoreCalore, SWT.NONE);
+		btnInsert_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		btnInsert_3.setText("INSERT");
+
 		// -- Meter Gas
 		grpMeterGas = new Group(compositeDevices, SWT.NONE);
 		grpMeterGas.setText("Meter Gas");
-		
+
 		// -- Meter Sonde
 		grpMeterSonde = new Group(compositeDevices, SWT.NONE);
 		grpMeterSonde.setText("Meter Sonde");
 		grpMeterSonde.setLayout(new GridLayout(4, false));
-		
+
 		Label lblTemperaturaLocali = new Label(grpMeterSonde, SWT.NONE);
 		lblTemperaturaLocali.setText("Temperatura Locali");
-		
+
 		text_4 = new Text(grpMeterSonde, SWT.BORDER);
-		GridData gd_text_4 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gd_text_4 = new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1);
 		gd_text_4.widthHint = 100;
 		text_4.setLayoutData(gd_text_4);
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblTemperaturaGiorno = new Label(grpMeterSonde, SWT.NONE);
 		lblTemperaturaGiorno.setText("Temperatura Giorno");
-		
+
 		text_5 = new Text(grpMeterSonde, SWT.BORDER);
-		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblTemperaturaEsterna = new Label(grpMeterSonde, SWT.NONE);
 		lblTemperaturaEsterna.setText("Temperatura Esterna");
-		
+
 		text_6 = new Text(grpMeterSonde, SWT.BORDER);
-		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblLuminosita = new Label(grpMeterSonde, SWT.NONE);
 		lblLuminosita.setText("Luminosita");
-		
+
 		text_7 = new Text(grpMeterSonde, SWT.BORDER);
-		text_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		text_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblSolarimetro = new Label(grpMeterSonde, SWT.NONE);
 		lblSolarimetro.setText("Solarimetro");
-		
+
 		text_8 = new Text(grpMeterSonde, SWT.BORDER);
-		text_8.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		text_8.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblSismografo = new Label(grpMeterSonde, SWT.NONE);
 		lblSismografo.setText("Sismografo");
-		
+
 		text_9 = new Text(grpMeterSonde, SWT.BORDER);
-		text_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		text_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
 		new Label(grpMeterSonde, SWT.NONE);
-		
+
 		Label lblOk_3 = new Label(grpMeterSonde, SWT.NONE);
-		lblOk_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		lblOk_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
+				1, 1));
 		lblOk_3.setText("OK");
-		
+
 		Button btnInsert = new Button(grpMeterSonde, SWT.NONE);
 		btnInsert.setText("INSERT");
-		
+
 		// -- Meter Termie
 		grpMeterTermie = new Group(compositeDevices, SWT.NONE);
 		grpMeterTermie.setText("Meter Termie");
@@ -523,15 +536,13 @@ public class GUI {
 				grpMeterElettrico, grpMeterGas, grpMeterTermie,
 				grpMeterRipartitoreCalore, grpMeterSonde });
 
-		
 		/**
 		 * 
 		 * 
 		 * SCHERMATA VISUALIZZAZIONE DATI
 		 * 
 		 */
-		
-		
+
 		TabItem tbtmViewData_1 = new TabItem(tabFolder, SWT.NONE);
 		tbtmViewData_1.setText("Mostra Letture");
 
@@ -611,7 +622,6 @@ public class GUI {
 		table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
 
 		Composite composite_2 = new Composite(tabFolder, SWT.NONE);
 

@@ -21,11 +21,10 @@ public class DataInsert {
 			String nomeCompartimento) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-
+		
 		int value = Integer.parseInt(idCompartimento);
 
-		List<Compartimento> compList = session
-				.createQuery("from Compartimento").list();
+		List<Compartimento> compList = session				.createQuery("from Compartimento").list();
 
 		for (int i = 0; i < compList.size(); i++) {
 			System.out.println(compList.get(i).getIdCompartimento());
@@ -45,10 +44,9 @@ public class DataInsert {
 		return true;
 	}
 
-	public static boolean insertEdificio(Session session, String idEdificio, String idCompartimento, String indirizzo) {
-		session = HibernateUtil.getSessionFactory().getCurrentSession();
+	public static boolean insertEdificio(String idEdificio, String idCompartimento, String indirizzo) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-
 		/**
 		 * Check esistenza IdEdificio
 		 */
