@@ -2,6 +2,8 @@ package com.rigers.main;
 
 import java.util.List;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
 import org.hibernate.Session;
 
 import com.rigers.db.*;
@@ -24,7 +26,7 @@ public class DataInsert {
 		
 		int value = Integer.parseInt(idCompartimento);
 
-		List<Compartimento> compList = session				.createQuery("from Compartimento").list();
+		List<Compartimento> compList = session.createQuery("from Compartimento").list();
 
 		for (int i = 0; i < compList.size(); i++) {
 			System.out.println(compList.get(i).getIdCompartimento());
@@ -44,7 +46,7 @@ public class DataInsert {
 		return true;
 	}
 
-	public static boolean insertEdificio(String idEdificio, String idCompartimento, String indirizzo) {
+	public static boolean insertEdificio(String idEdificio, int indexCompartimento, String indirizzo) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		/**
@@ -52,6 +54,7 @@ public class DataInsert {
 		 */
 		int idEdifInt = Integer.parseInt(idEdificio);
 		List<Edificio> ediList = session.createQuery("from Edificio").list();
+		List<Compartimento> compList = session.createQuery("from Compartimento").list();
 		
 		for(int i = 0; i<ediList.size(); i++){
 			Boolean compare = ediList.get(i).getIdEdificio() == idEdifInt;
@@ -66,7 +69,8 @@ public class DataInsert {
 		edificio.setIdEdificio(idEdifInt);
 		edificio.setIndirizzo(indirizzo);
 		
-		Compartimento compartimento = new Compartimento(Integer.parseInt(idCompartimento));
+		Compartimento compartimento = ediList.get(indexCompartimento).getCompartimento();
+		System.out.println("Compartimento "+compartimento.getIdCompartimento());
 		edificio.setCompartimento(compartimento);
 		
 		session.save(edificio);

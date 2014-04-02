@@ -18,7 +18,7 @@ public class DataView {
 		
 		String[] compItems = new String[compList.size()];
 		for (int i = 0; i < compList.size(); i++) {
-			compItems[i] = Integer.toString(compList.get(i).getIdCompartimento());
+			compItems[i] = Integer.toString(compList.get(i).getIdCompartimento()) + ": "+compList.get(i).getNomeCompartimento();
 		}
 		session.getTransaction().commit();
 		return compItems;
@@ -32,7 +32,7 @@ public class DataView {
 		
 		String[] edifItems = new String[edifList.size()];
 		for (int i = 0; i < edifList.size(); i++) {
-			edifItems[i] = Integer.toString(edifList.get(i).getIdEdificio());
+			edifItems[i] = Integer.toString(edifList.get(i).getIdEdificio()) +": "+ edifList.get(i).getIndirizzo();
 		}
 		session.getTransaction().commit();
 		return edifItems;

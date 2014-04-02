@@ -1,4 +1,4 @@
-package com.rigers.GUI.main;
+package com.rigers.GUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,23 +122,6 @@ public class GUI {
 		shlRigers.setText("RIGERS");
 		shlRigers.setLayout(new FillLayout(SWT.VERTICAL));
 
-		Menu menu_1 = new Menu(shlRigers, SWT.BAR);
-		shlRigers.setMenuBar(menu_1);
-
-		MenuItem mntmNewSubmenu = new MenuItem(menu_1, SWT.CASCADE);
-		mntmNewSubmenu.setText("File");
-
-		Menu menu_2 = new Menu(mntmNewSubmenu);
-		mntmNewSubmenu.setMenu(menu_2);
-
-		MenuItem mntmNewItem_1 = new MenuItem(menu_2, SWT.NONE);
-		mntmNewItem_1.setText("Connect...");
-
-		new MenuItem(menu_2, SWT.SEPARATOR);
-
-		MenuItem mntmNewItem_2 = new MenuItem(menu_2, SWT.NONE);
-		mntmNewItem_2.setText("Quit");
-
 		TabFolder tabFolder = new TabFolder(shlRigers, SWT.NONE);
 
 		TabItem tbtmViewData = new TabItem(tabFolder, SWT.NONE);
@@ -245,9 +228,9 @@ public class GUI {
 		lblCompartimento.setText("Compartimento");
 
 		comboSelectComp = new Combo(grpEdificio_1, SWT.NONE);
-		GridData gd_comboIdCompartimento = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_comboIdCompartimento.widthHint = 150;
-		comboSelectComp.setLayoutData(gd_comboIdCompartimento);
+		GridData gd_comboSelectComp = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_comboSelectComp.widthHint = 120;
+		comboSelectComp.setLayoutData(gd_comboSelectComp);
 
 		
 		comboSelectComp.setItems(DataView.CompItems());
@@ -258,7 +241,7 @@ public class GUI {
 		textIndirizzoEdificio = new Text(grpEdificio_1, SWT.BORDER);
 		GridData gd_text = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,
 				1);
-		gd_text.widthHint = 240;
+		gd_text.widthHint = 200;
 		textIndirizzoEdificio.setLayoutData(gd_text);
 
 		lblEdifInsert = new Label(grpEdificio_1, SWT.NONE);
@@ -267,7 +250,7 @@ public class GUI {
 		lblEdifInsert.setForeground(SWTResourceManager
 				.getColor(SWT.COLOR_DARK_GREEN));
 		lblEdifInsert.setText("OK");
-
+		
 		/**
 		 * Bottone Inserimento Edificio
 		 */
@@ -275,8 +258,9 @@ public class GUI {
 		btnInsertEdificio.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				System.out.println("comp Index:"+comboSelectComp.getSelectionIndex());
 				if (DataInsert.insertEdificio(spinnerIdEdificio.getText(),
-						comboSelectComp.getText(),
+						comboSelectComp.getSelectionIndex(),
 						textIndirizzoEdificio.getText())) {
 					lblEdifInsert.setForeground(SWTResourceManager
 							.getColor(SWT.COLOR_DARK_GREEN));
@@ -311,10 +295,10 @@ public class GUI {
 
 		comboSelectComp2 = new Combo(grpLettura, SWT.NONE);
 		comboSelectComp2.setItems(DataView.CompItems());
-		GridData gd_comboCompInsert = new GridData(SWT.FILL, SWT.CENTER, false,
+		GridData gd_comboSelectComp2 = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
-		gd_comboCompInsert.widthHint = 150;
-		comboSelectComp2.setLayoutData(gd_comboCompInsert);
+		gd_comboSelectComp2.widthHint = 120;
+		comboSelectComp2.setLayoutData(gd_comboSelectComp2);
 
 		Label lblEdificio_2 = new Label(grpLettura, SWT.NONE);
 		lblEdificio_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -323,10 +307,10 @@ public class GUI {
 
 		comboSelectEdif = new Combo(grpLettura, SWT.NONE);
 		comboSelectEdif.setItems(DataView.EdifItems());
-		GridData gd_comboEdifInsert = new GridData(SWT.FILL, SWT.CENTER, false,
+		GridData gd_comboSelectEdif = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
-		gd_comboEdifInsert.widthHint = 100;
-		comboSelectEdif.setLayoutData(gd_comboEdifInsert);
+		gd_comboSelectEdif.widthHint = 120;
+		comboSelectEdif.setLayoutData(gd_comboSelectEdif);
 		
 		Label lblDispositivo_1 = new Label(grpLettura, SWT.NONE);
 		lblDispositivo_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
@@ -620,12 +604,24 @@ public class GUI {
 		DateTime dateTimeTo = new DateTime(grpFilters, SWT.BORDER);
 		
 		Button btnMostraCompartimenti = new Button(grpFilters, SWT.NONE);
+		btnMostraCompartimenti.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ShowCompWindow.main(null);
+			}
+		});
 		btnMostraCompartimenti.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		btnMostraCompartimenti.setText("MOSTRA COMPARTIMENTI");
 		
 		Button btnMostraEdifici = new Button(grpFilters, SWT.NONE);
 		btnMostraEdifici.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		btnMostraEdifici.setText("MOSTRA EDIFICI");
+		btnMostraEdifici.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ShowEdifWindow.main(null);
+			}
+		});
 		new Label(grpFilters, SWT.NONE);
 
 		Button btnReset = new Button(grpFilters, SWT.NONE);
@@ -666,11 +662,8 @@ public class GUI {
 		tblclmnDisp.setText("Dispositivo");
 		
 		TableColumn tblclmnDataLettura = new TableColumn(table, SWT.NONE);
-		tcl_composite_4.setColumnData(tblclmnDataLettura, new ColumnPixelData(150, true, true));
+		tcl_composite_4.setColumnData(tblclmnDataLettura, new ColumnPixelData(363, true, true));
 		tblclmnDataLettura.setText("Data Lettura");
-		
-		TableColumn tableClmnButtons = new TableColumn(table, SWT.NONE);
-		tcl_composite_4.setColumnData(tableClmnButtons, new ColumnPixelData(150, true, true));
 		
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 
