@@ -37,4 +37,18 @@ public class DataView {
 		session.getTransaction().commit();
 		return edifItems;
 	}
+	
+	public static String[] LettureItems(){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		List<Edificio> edifList = session.createQuery(
+				"from Edificio").list();
+		
+		String[] edifItems = new String[edifList.size()];
+		for (int i = 0; i < edifList.size(); i++) {
+			edifItems[i] = Integer.toString(edifList.get(i).getIdEdificio()) +": "+ edifList.get(i).getIndirizzo();
+		}
+		session.getTransaction().commit();
+		return edifItems;
+	}
 }

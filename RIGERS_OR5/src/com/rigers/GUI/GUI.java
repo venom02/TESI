@@ -33,11 +33,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.rigers.db.LetturaDispositivo;
 import com.rigers.main.*;
+import com.rigers.persistence.HibernateUtil;
+
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.hibernate.Session;
 
 public class GUI {
 	private static class ContentProvider implements IStructuredContentProvider {
@@ -227,7 +231,7 @@ public class GUI {
 		Label lblCompartimento = new Label(grpEdificio_1, SWT.NONE);
 		lblCompartimento.setText("Compartimento");
 
-		comboSelectComp = new Combo(grpEdificio_1, SWT.NONE);
+		comboSelectComp = new Combo(grpEdificio_1, SWT.READ_ONLY);
 		GridData gd_comboSelectComp = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_comboSelectComp.widthHint = 120;
 		comboSelectComp.setLayoutData(gd_comboSelectComp);
@@ -293,7 +297,7 @@ public class GUI {
 				false, 1, 1));
 		lblEdificio_1.setText("Compartimento");
 
-		comboSelectComp2 = new Combo(grpLettura, SWT.NONE);
+		comboSelectComp2 = new Combo(grpLettura, SWT.READ_ONLY);
 		comboSelectComp2.setItems(DataView.CompItems());
 		GridData gd_comboSelectComp2 = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
@@ -305,7 +309,7 @@ public class GUI {
 				false, 1, 1));
 		lblEdificio_2.setText("Edificio");
 
-		comboSelectEdif = new Combo(grpLettura, SWT.NONE);
+		comboSelectEdif = new Combo(grpLettura, SWT.READ_ONLY);
 		comboSelectEdif.setItems(DataView.EdifItems());
 		GridData gd_comboSelectEdif = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
@@ -317,7 +321,7 @@ public class GUI {
 				false, false, 1, 1));
 		lblDispositivo_1.setText("Dispositivo");
 
-		comboSelectDisp = new Combo(grpLettura, SWT.NONE);
+		comboSelectDisp = new Combo(grpLettura, SWT.READ_ONLY);
 
 		comboSelectDisp.setItems(new String[] { "Meter Acqua",
 				"Meter Elettrico", "Meter Gas", "Meter Termie",
@@ -587,15 +591,15 @@ public class GUI {
 		lblA.setLayoutData(gd_lblA);
 		lblA.setText("A:");
 
-		Combo comboComp = new Combo(grpFilters, SWT.NONE);
+		Combo comboComp = new Combo(grpFilters, SWT.READ_ONLY);
 		comboComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
-		Combo comboEdif = new Combo(grpFilters, SWT.NONE);
+		Combo comboEdif = new Combo(grpFilters, SWT.READ_ONLY);
 		comboEdif.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
-		Combo comboDisp = new Combo(grpFilters, SWT.NONE);
+		Combo comboDisp = new Combo(grpFilters, SWT.READ_ONLY);
 		comboDisp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -642,10 +646,16 @@ public class GUI {
 		grpResults.setText("Risultati");
 		grpResults.setLayout(new FillLayout(SWT.HORIZONTAL));
 
+		/**
+		 * COMPOSITE TABELLA
+		 */
 		Composite composite_4 = new Composite(grpResults, SWT.NONE);
 		TableColumnLayout tcl_composite_4 = new TableColumnLayout();
 		composite_4.setLayout(tcl_composite_4);
 
+		/**
+		 * TABELLA
+		 */
 		TableViewer tableViewer = new TableViewer(composite_4, SWT.BORDER
 				| SWT.FULL_SELECTION);
 		tableViewer.setColumnProperties(new String[] {});
@@ -664,10 +674,5 @@ public class GUI {
 		TableColumn tblclmnDataLettura = new TableColumn(table, SWT.NONE);
 		tcl_composite_4.setColumnData(tblclmnDataLettura, new ColumnPixelData(363, true, true));
 		tblclmnDataLettura.setText("Data Lettura");
-		
-		TableItem tableItem = new TableItem(table, SWT.NONE);
-
-		Composite composite_2 = new Composite(tabFolder, SWT.NONE);
-
 	}
 }
