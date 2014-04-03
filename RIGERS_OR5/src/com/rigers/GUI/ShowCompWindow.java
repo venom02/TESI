@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Text;
 import org.hibernate.Session;
 
 import com.rigers.db.Compartimento;
+import com.rigers.main.DataView;
 import com.rigers.persistence.HibernateUtil;
 
 public class ShowCompWindow {
@@ -29,7 +30,7 @@ public class ShowCompWindow {
 	}
 
 	protected Shell shell;
-	private Text text;
+	private org.eclipse.swt.widgets.List list;
 
 	/**
 	 * Launch the application.
@@ -62,12 +63,7 @@ public class ShowCompWindow {
 	/**
 	 * Create contents of the window.
 	 */
-	protected void createContents() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		List<Compartimento> compList = session.createQuery("from Compartimento").list();
-		
+	protected void createContents() {	
 		shell = new Shell();
 		shell.setSize(300, 400);
 		shell.setText("SWT Application");
@@ -77,14 +73,7 @@ public class ShowCompWindow {
 		grpCompartimenti.setText("Compartimenti");
 		grpCompartimenti.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		text = new Text(grpCompartimenti, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		text.setText("ID\t Nome\n");
-		for (int i = 0; i < compList.size(); i++) {
-			text.append(Integer.toString(compList.get(i).getIdCompartimento()) + "\t "+compList.get(i).getNomeCompartimento()+"\n");
-		}
-		
-		
-		session.getTransaction().commit();
-
+		list = new org.eclipse.swt.widgets.List(grpCompartimenti, SWT.BORDER | SWT.V_SCROLL);
+		list.setItems(DataView.CompItems());
 	}
 }

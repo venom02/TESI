@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Text;
 import org.hibernate.Session;
 
 import com.rigers.db.Edificio;
+import com.rigers.main.DataView;
 import com.rigers.persistence.HibernateUtil;
 
 public class ShowEdifWindow {
@@ -29,7 +30,7 @@ public class ShowEdifWindow {
 	}
 
 	protected Shell shell;
-	private Text txtIdNome;
+	private org.eclipse.swt.widgets.List list;
 
 	/**
 	 * Launch the application.
@@ -64,10 +65,10 @@ public class ShowEdifWindow {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
+//		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+//		session.beginTransaction();
 
-		List<Edificio> ediList = session.createQuery("from Edificio").list();
+//		List<Edificio> ediList = session.createQuery("from Edificio").list();
 
 		shell = new Shell();
 		shell.setSize(300, 400);
@@ -78,16 +79,17 @@ public class ShowEdifWindow {
 		grpEdifici.setText("Edifici");
 		grpEdifici.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		txtIdNome = new Text(grpEdifici, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		txtIdNome.setText("ID\t Compartimento\t Indirizzo Edificio\n");
-		for (int i = 0; i < ediList.size(); i++) {
-			txtIdNome.append(Integer.toString(ediList.get(i).getIdEdificio())
-					+ "\t "
-					+ ediList.get(i).getCompartimento()
-							.getNomeCompartimento() + "\t "+ediList.get(i).getIndirizzo()+"\n");
-		}
+		
+		list = new org.eclipse.swt.widgets.List(grpEdifici, SWT.BORDER | SWT.V_SCROLL);
+//		for (int i = 0; i < ediList.size(); i++) {
+//			list.setItem(i, (Integer.toString(ediList.get(i).getIdEdificio())
+//					+ "\t "
+//					+ ediList.get(i).getCompartimento()
+//							.getNomeCompartimento() + "\t "+ediList.get(i).getIndirizzo()+"\n"));
+//		}
 
-		session.getTransaction().commit();
+		list.setItems(DataView.EdifItems());
+//		session.getTransaction().commit();
 
 	}
 }
