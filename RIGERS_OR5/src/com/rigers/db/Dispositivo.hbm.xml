@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 27-mar-2014 21.08.14 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 7-apr-2014 11.05.47 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.Dispositivo" table="dispositivo" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.DispositivoId">
@@ -20,8 +20,8 @@
         </property>
         <set name="letturaDispositivos" table="lettura_dispositivo" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="idDispositivo" not-null="true" />
-                <column name="idEdificio" not-null="true" />
+                <column name="idDispositivo" not-null="true" unique="true" />
+                <column name="idEdificio" not-null="true" unique="true" />
             </key>
             <one-to-many class="com.rigers.db.LetturaDispositivo" />
         </set>
