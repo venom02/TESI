@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 7-apr-2014 11.05.46 by Hibernate Tools 3.4.0.CR1
+// Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class MeterTermie implements java.io.Serializable {
 
-	private MeterTermieId id;
+	private int idLettura;
 	private LetturaDispositivo letturaDispositivo;
 	private Date currentDateTime;
 	private Integer currentEnergy;
@@ -48,12 +48,12 @@ public class MeterTermie implements java.io.Serializable {
 		this.currentImpulseCount2 = currentImpulseCount2;
 	}
 
-	public MeterTermieId getId() {
-		return this.id;
+	public int getIdLettura() {
+		return this.idLettura;
 	}
 
-	public void setId(MeterTermieId id) {
-		this.id = id;
+	public void setIdLettura(int idLettura) {
+		this.idLettura = idLettura;
 	}
 
 	public LetturaDispositivo getLetturaDispositivo() {

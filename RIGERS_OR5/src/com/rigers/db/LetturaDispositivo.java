@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 7-apr-2014 11.05.46 by Hibernate Tools 3.4.0.CR1
+// Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 

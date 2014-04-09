@@ -25,17 +25,17 @@ public class DbManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 
-		// flushTables(session);
+		flushTables(session);
 
-		// fillCompartimento(session);
+		fillCompartimento(session);
 
-		// fillEdificio(session);
+		fillEdificio(session);
 
-		//fillLetturaRipartitoreCalore(session);
+		fillLetturaRipartitoreCalore(session);
 		
-		//fillLetturaAcqua(session);
+		fillLetturaAcqua(session);
 		
-		//fillLetturaSonde(session);
+		fillLetturaSonde(session);
 
 		session.getTransaction().commit();
 	}
@@ -57,14 +57,10 @@ public class DbManager {
 					idMeter, ediList.get(i));
 
 			// PK Meter Sonde
-			MeterSondeId pkMeterSonde = new MeterSondeId();
-			pkMeterSonde.setDataLettura(lettDisp.getId().getDataLettura());
-			pkMeterSonde.setIdDispositivo(lettDisp.getId().getIdDispositivo());
-			pkMeterSonde.setIdEdificio(lettDisp.getId().getIdEdificio());
-
+			
 			// INSERT Ripartitore Calore
 			MeterSonde meterSonde = new MeterSonde(lettDisp);
-			meterSonde.setId(pkMeterSonde);
+			meterSonde.setIdLettura(lettDisp.getIdLettura());
 			meterSonde.setLuminosita(generator.nextInt(10));
 			meterSonde.setSismografo(generator.nextInt(100));
 			meterSonde.setTempEsterna(generator.nextInt(40));
@@ -90,15 +86,10 @@ public class DbManager {
 			LetturaDispositivo lettDisp = generateLettura(session,
 					idMeter, ediList.get(i));
 
-			// PK Meter Acqua
-			MeterAcquaId pkMeterAcqua = new MeterAcquaId();
-			pkMeterAcqua.setDataLettura(lettDisp.getId().getDataLettura());
-			pkMeterAcqua.setIdDispositivo(lettDisp.getId().getIdDispositivo());
-			pkMeterAcqua.setIdEdificio(lettDisp.getId().getIdEdificio());
-
+			
 			// INSERT MeterAcqua
 			MeterAcqua meterAcqua = new MeterAcqua(lettDisp);
-			meterAcqua.setId(pkMeterAcqua);
+			meterAcqua.setIdLettura(lettDisp.getIdLettura());
 			meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
 			meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
 			meterAcqua.setPeriodicReadingDate(new Date());
@@ -122,16 +113,11 @@ public class DbManager {
 			LetturaDispositivo lettDisp = generateLettura(session,
 					idMeter, ediList.get(i));
 
-			// PK Meter Ripartitore Calore
-			MeterRipartitoreCaloreId pkMeterRipCal = new MeterRipartitoreCaloreId();
-			pkMeterRipCal.setDataLettura(lettDisp.getId().getDataLettura());
-			pkMeterRipCal.setIdDispositivo(lettDisp.getId().getIdDispositivo());
-			pkMeterRipCal.setIdEdificio(lettDisp.getId().getIdEdificio());
-
+		
 			// INSERT Meter Ripartitore Calore
 			MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
 					lettDisp, unitaConsumo.nextInt(500));
-			ripMeterRipCal.setId(pkMeterRipCal);
+			ripMeterRipCal.setIdLettura(lettDisp.getIdLettura());
 			session.save(ripMeterRipCal);
 		}
 	}
@@ -156,18 +142,13 @@ public class DbManager {
 		int ss = generator.nextInt(60);
 		Date date = new Date(114, mm, dd, hh, mmin, ss);
 
-		// PK Lettura Dispositovo
-		LetturaDispositivoId lettDispId = new LetturaDispositivoId(date,
-				idDispositivo, edificio.getIdEdificio());
-
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
 				edificio.getIdEdificio());
 		Dispositivo dispositivo = new Dispositivo(id, edificio);
 
 		// INSERT lettura dispositivo
-		LetturaDispositivo lettDisp = new LetturaDispositivo(lettDispId,
-				dispositivo);
+		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo, date);
 		session.save(lettDisp);
 		return lettDisp;
 	}

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 7-apr-2014 11.05.47 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.LetturaDispositivo" table="lettura_dispositivo" catalog="rigers">
         <id name="idLettura" type="java.lang.Integer">
@@ -9,11 +9,11 @@
             <generator class="identity" />
         </id>
         <many-to-one name="dispositivo" class="com.rigers.db.Dispositivo" fetch="select">
-            <column name="idDispositivo" not-null="true" unique="true" />
-            <column name="idEdificio" not-null="true" unique="true" />
+            <column name="idDispositivo" not-null="true" />
+            <column name="idEdificio" not-null="true" />
         </many-to-one>
         <property name="dataLettura" type="timestamp">
-            <column name="Data_Lettura" length="19" not-null="true" unique="true" />
+            <column name="Data_Lettura" length="19" not-null="true" />
         </property>
         <one-to-one name="meterGas" class="com.rigers.db.MeterGas"></one-to-one>
         <one-to-one name="meterSonde" class="com.rigers.db.MeterSonde"></one-to-one>

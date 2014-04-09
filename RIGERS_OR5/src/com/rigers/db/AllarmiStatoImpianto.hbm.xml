@@ -1,50 +1,40 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 7-apr-2014 11.05.47 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.AllarmiStatoImpianto" table="allarmi_stato_impianto" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.AllarmiStatoImpiantoId">
-            <key-property name="dataLetturaPub" type="timestamp">
-                <column name="Data_Lettura_Pub" length="19" />
+            <key-property name="statoInterrMagnetotermico" type="java.lang.Byte">
+                <column name="stato_interr_magnetotermico" />
             </key-property>
-            <key-property name="idDispositivoPub" type="int">
-                <column name="idDispositivo_Pub" />
+            <key-property name="statoDifferenzialeApparato" type="java.lang.Byte">
+                <column name="stato_differenziale_apparato" />
             </key-property>
-            <key-property name="idCompartimento" type="int">
-                <column name="idCompartimento" />
+            <key-property name="statoOnOff" type="java.lang.Byte">
+                <column name="stato_on_off" />
+            </key-property>
+            <key-property name="assenzaReteElettrica" type="java.lang.Byte">
+                <column name="assenza_rete_elettrica" />
+            </key-property>
+            <key-property name="mancatoOnTramonto" type="java.lang.Byte">
+                <column name="mancato_on_tramonto" />
+            </key-property>
+            <key-property name="mancatoOffAlba" type="java.lang.Byte">
+                <column name="mancato_off_alba" />
+            </key-property>
+            <key-property name="assorbimentoSopraSoglia" type="java.lang.Integer">
+                <column name="assorbimento_sopra_soglia" />
+            </key-property>
+            <key-property name="assorbimentoSottoSoglia" type="java.lang.Integer">
+                <column name="assorbimento_sotto_soglia" />
+            </key-property>
+            <key-property name="aperturaQuadroElettrico" type="java.lang.Byte">
+                <column name="apertura_quadro_elettrico" />
+            </key-property>
+            <key-property name="allarmeGuastoSingoloPunto" type="java.lang.Byte">
+                <column name="allarme_guasto_singolo_punto" />
             </key-property>
         </composite-id>
-        <one-to-one name="letturaDispositivoPub" class="com.rigers.db.LetturaDispositivoPub" constrained="true"></one-to-one>
-        <property name="statoInterrMagnetotermico" type="java.lang.Byte">
-            <column name="stato_interr_magnetotermico" />
-        </property>
-        <property name="statoDifferenzialeApparato" type="java.lang.Byte">
-            <column name="stato_differenziale_apparato" />
-        </property>
-        <property name="statoOnOff" type="java.lang.Byte">
-            <column name="stato_on_off" />
-        </property>
-        <property name="assenzaReteElettrica" type="java.lang.Byte">
-            <column name="assenza_rete_elettrica" />
-        </property>
-        <property name="mancatoOnTramonto" type="java.lang.Byte">
-            <column name="mancato_on_tramonto" />
-        </property>
-        <property name="mancatoOffAlba" type="java.lang.Byte">
-            <column name="mancato_off_alba" />
-        </property>
-        <property name="assorbimentoSopraSoglia" type="java.lang.Integer">
-            <column name="assorbimento_sopra_soglia" />
-        </property>
-        <property name="assorbimentoSottoSoglia" type="java.lang.Integer">
-            <column name="assorbimento_sotto_soglia" />
-        </property>
-        <property name="aperturaQuadroElettrico" type="java.lang.Byte">
-            <column name="apertura_quadro_elettrico" />
-        </property>
-        <property name="allarmeGuastoSingoloPunto" type="java.lang.Byte">
-            <column name="allarme_guasto_singolo_punto" />
-        </property>
     </class>
 </hibernate-mapping>

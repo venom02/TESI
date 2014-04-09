@@ -1,38 +1,28 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 7-apr-2014 11.05.47 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.Telecontrollo" table="telecontrollo" catalog="rigers">
         <composite-id name="id" class="com.rigers.db.TelecontrolloId">
-            <key-property name="dataLetturaPub" type="timestamp">
-                <column name="Data_Lettura_Pub" length="19" />
+            <key-property name="programmOrarioFunzionamento" type="java.lang.Integer">
+                <column name="programm_orario_funzionamento" />
             </key-property>
-            <key-property name="idDispositivoPub" type="int">
-                <column name="idDispositivo_Pub" />
+            <key-property name="comandoInterruttoreMagnetotermico" type="java.lang.Byte">
+                <column name="comando_interruttore_magnetotermico" />
             </key-property>
-            <key-property name="idCompartimento" type="int">
-                <column name="idCompartimento" />
+            <key-property name="comandoAperturaDifferenziale" type="java.lang.Byte">
+                <column name="comando_apertura_differenziale" />
+            </key-property>
+            <key-property name="comandoOnOffManuale" type="java.lang.Byte">
+                <column name="comando_on_off_manuale" />
+            </key-property>
+            <key-property name="dimmerizzazioneOnOff" type="java.lang.Byte">
+                <column name="dimmerizzazione_on_off" />
+            </key-property>
+            <key-property name="setPointDimmer" type="java.lang.Integer">
+                <column name="set_point_dimmer" />
             </key-property>
         </composite-id>
-        <one-to-one name="letturaDispositivoPub" class="com.rigers.db.LetturaDispositivoPub" constrained="true"></one-to-one>
-        <property name="programmOrarioFunzionamento" type="java.lang.Integer">
-            <column name="programm_orario_funzionamento" />
-        </property>
-        <property name="comandoInterruttoreMagnetotermico" type="java.lang.Byte">
-            <column name="comando_interruttore_magnetotermico" />
-        </property>
-        <property name="comandoAperturaDifferenziale" type="java.lang.Byte">
-            <column name="comando_apertura_differenziale" />
-        </property>
-        <property name="comandoOnOffManuale" type="java.lang.Byte">
-            <column name="comando_on_off_manuale" />
-        </property>
-        <property name="dimmerizzazioneOnOff" type="java.lang.Byte">
-            <column name="dimmerizzazione_on_off" />
-        </property>
-        <property name="setPointDimmer" type="java.lang.Integer">
-            <column name="set_point_dimmer" />
-        </property>
     </class>
 </hibernate-mapping>

@@ -3,6 +3,7 @@ package com.rigers.GUI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -69,6 +70,9 @@ public class GUI {
 	private Composite compositeInsertData;
 	private TabFolder tabFolder;
 	private TabItem tbtmViewData;
+	private String[] dispList = new String[] { "Meter Acqua",
+			"Meter Elettrico", "Meter Gas", "Meter Ripartitore Calore",
+			"Meter Sonde", "Meter Termie", "*" };
 
 	/**
 	 * Launch the application.
@@ -315,9 +319,21 @@ public class GUI {
 		lblA.setText("A:");
 
 		comboComp = new Combo(grpFilters, SWT.READ_ONLY);
+		comboComp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (comboComp.getText().equals("*")) {
+					comboEdif.setItems(DataView.EdifItems());
+				} else {
+					comboEdif.setItems(DataView.EdifItems(comboComp.getText()));
+				}
+				comboEdif.add("*");
+			}
+		});
 		comboComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 		comboComp.setItems(compItems);
+		comboComp.add("*");
 
 		comboEdif = new Combo(grpFilters, SWT.READ_ONLY);
 		comboEdif.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
@@ -326,10 +342,13 @@ public class GUI {
 		comboDisp = new Combo(grpFilters, SWT.READ_ONLY);
 		comboDisp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
+		comboDisp.setItems(dispList);
 
 		dateTimeFrom = new DateTime(grpFilters, SWT.BORDER);
+		dateTimeFrom.setDate(2014, 0, 1);
 
 		dateTimeTo = new DateTime(grpFilters, SWT.BORDER);
+		dateTimeTo.setDate(2014, 11, 31);
 
 		Button btnMostraCompartimenti = new Button(grpFilters, SWT.NONE);
 		btnMostraCompartimenti.addSelectionListener(new SelectionAdapter() {
@@ -365,19 +384,26 @@ public class GUI {
 		btnGo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int compIndex = comboComp.getSelectionIndex();
-				int edifIndex = comboEdif.getSelectionIndex();
+				Date dateFrom = new Date(dateTimeFrom.getYear() - 1900,
+						dateTimeFrom.getMonth(), dateTimeFrom.getDay());
+				Date dateTo = new Date(dateTimeTo.getYear() - 1900, dateTimeTo
+						.getMonth(), dateTimeTo.getDay());
+
 				int dispIndex = comboDisp.getSelectionIndex();
-				Date dateFrom = new Date(dateTimeFrom.getYear(), dateTimeFrom
-						.getMonth(), dateTimeFrom.getDay(), dateTimeFrom
-						.getHours(), dateTimeFrom.getMinutes(), dateTimeFrom
-						.getSeconds());
-				Date dateTo = new Date(dateTimeTo.getYear(), dateTimeTo
-						.getMonth(), dateTimeTo.getDay(),
-						dateTimeTo.getHours(), dateTimeTo.getMinutes(),
-						dateTimeTo.getSeconds());
-				// listLettureDispositivo.setItems(DataView.LettureItems(compIndex,
-				// edifIndex, dispIndex, dateFrom, dateTo));
+				if (dispIndex == 6) {
+					listLettureDispositivo.setItems(DataView.LettureItems(dateFrom, dateTo));
+				} else {
+					if (comboEdif.getText().equals("*")) {
+						listLettureDispositivo.setItems(DataView.LettureItems(
+								dispIndex, dateFrom, dateTo));
+					} else {
+						int edifId = Integer
+								.parseInt(comboEdif.getText().substring(0,
+										comboEdif.getText().indexOf(":")));
+						listLettureDispositivo.setItems(DataView.LettureItems(
+								edifId, dispIndex, dateFrom, dateTo));
+					}
+				}
 			}
 		});
 		btnGo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
@@ -391,9 +417,8 @@ public class GUI {
 		grpResults.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		listLettureDispositivo = new org.eclipse.swt.widgets.List(grpResults,
-				SWT.BORDER);
-		// listLettureDispositivo.setItems(DataView.allLettureItems());
-
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		listLettureDispositivo.setItems(new String[] {});
 	}
 
 	/**
@@ -437,9 +462,7 @@ public class GUI {
 
 		comboSelectDisp = new Combo(grpLettura, SWT.READ_ONLY);
 
-		comboSelectDisp.setItems(new String[] { "Meter Acqua",
-				"Meter Elettrico", "Meter Gas", "Meter Termie",
-				"Meter Ripartitore Calore", "Meter Sonde" });
+		comboSelectDisp.setItems(dispList);
 
 		comboSelectDisp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
@@ -480,6 +503,9 @@ public class GUI {
 
 		DateTime dateTime_2 = new DateTime(grpLettura, SWT.BORDER);
 		new Label(grpLettura, SWT.NONE);
+		new Label(grpLettura, SWT.NONE);
+		new Label(grpLettura, SWT.NONE);
+		new Label(grpLettura, SWT.NONE);
 
 		/**
 		 * Composite delle diverse finestre di inserimento
@@ -490,44 +516,32 @@ public class GUI {
 		compositeDevices.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 
-		Composite blankcomp = new Composite(compositeDevices, SWT.NONE);		
-		
+		Composite blankcomp = new Composite(compositeDevices, SWT.NONE);
+
 		// -- Meter Acqua
 		meter_acqua();
 
 		// -- Meter Elettrico
 		meter_elettrico();
-		
+
 		// -- Meter Ripartitore Calore
 		meter_ripartitore_calore();
 
 		// -- Meter Gas
 		meter_gas();
-		
+
 		// -- Meter Sonde
 		meter_sonde();
-		
+
 		// -- Meter Termie
 		meter_termie();
 
-
 	}
-	
+
 	private void meter_acqua() {
 		grpMeterAcqua = new Group(compositeDevices, SWT.NONE);
 		grpMeterAcqua.setText("Meter Acqua");
-		grpMeterAcqua.setLayout(new GridLayout(4, false));
-		
-		Label lblOk_1 = new Label(grpMeterAcqua, SWT.NONE);
-		lblOk_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
-				1, 1));
-		lblOk_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
-		lblOk_1.setText("OK");
-
-		Button btnInsert_2 = new Button(grpMeterAcqua, SWT.NONE);
-		btnInsert_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		btnInsert_2.setText("INSERT");
+		grpMeterAcqua.setLayout(new GridLayout(5, false));
 
 		Label lblCurrentReadoutValue = new Label(grpMeterAcqua, SWT.NONE);
 		lblCurrentReadoutValue.setText("Current Readout Value");
@@ -538,8 +552,9 @@ public class GUI {
 		gd_text_1.widthHint = 100;
 		text_1.setLayoutData(gd_text_1);
 
-		Label lblDal = new Label(grpMeterAcqua, SWT.NONE);
-		lblDal.setText("dal");
+		Label lblDal_1 = new Label(grpMeterAcqua, SWT.NONE);
+		lblDal_1.setText("dal");
+		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 
 		Label lblPeriodicReadoutValue = new Label(grpMeterAcqua, SWT.NONE);
@@ -551,8 +566,9 @@ public class GUI {
 		gd_text_2.widthHint = 100;
 		text_2.setLayoutData(gd_text_2);
 
-		Label lblDal_1 = new Label(grpMeterAcqua, SWT.NONE);
-		lblDal_1.setText("dal");
+		Label lblDal = new Label(grpMeterAcqua, SWT.NONE);
+		lblDal.setText("dal");
+		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 
 		Label lblPeriodicReadingDate = new Label(grpMeterAcqua, SWT.NONE);
@@ -563,7 +579,20 @@ public class GUI {
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
-		
+		new Label(grpMeterAcqua, SWT.NONE);
+		new Label(grpMeterAcqua, SWT.NONE);
+
+		Label lblOk_1 = new Label(grpMeterAcqua, SWT.NONE);
+		lblOk_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
+				1, 1));
+		lblOk_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
+		lblOk_1.setText("OK");
+
+		Button btnInsert_2 = new Button(grpMeterAcqua, SWT.NONE);
+		btnInsert_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		btnInsert_2.setText("INSERT");
+
 	}
 
 	private void meter_elettrico() {
@@ -682,15 +711,14 @@ public class GUI {
 		Button btnInsert = new Button(grpMeterSonde, SWT.NONE);
 		btnInsert.setText("INSERT");
 
-		
 	}
 
-	private void meter_termie(){
+	private void meter_termie() {
 		grpMeterTermie = new Group(compositeDevices, SWT.NONE);
 		grpMeterTermie.setText("Meter Termie");
 		compositeDevices.setTabList(new Control[] { grpMeterAcqua,
 				grpMeterElettrico, grpMeterGas, grpMeterTermie,
 				grpMeterRipartitoreCalore, grpMeterSonde });
 	}
-	
+
 }

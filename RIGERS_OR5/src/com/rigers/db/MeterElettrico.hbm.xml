@@ -1,20 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 7-apr-2014 11.05.47 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.rigers.db.MeterElettrico" table="meter_elettrico" catalog="rigers">
-        <composite-id name="id" class="com.rigers.db.MeterElettricoId">
-            <key-property name="dataLettura" type="timestamp">
-                <column name="Data_Lettura" length="19" />
-            </key-property>
-            <key-property name="idDispositivo" type="int">
-                <column name="idDispositivo" />
-            </key-property>
-            <key-property name="idEdificio" type="int">
-                <column name="idEdificio" />
-            </key-property>
-        </composite-id>
+        <id name="idLettura" type="int">
+            <column name="idLettura" />
+            <generator class="foreign">
+                <param name="property">letturaDispositivo</param>
+            </generator>
+        </id>
         <one-to-one name="letturaDispositivo" class="com.rigers.db.LetturaDispositivo" constrained="true"></one-to-one>
         <property name="totEAttivaF1" type="java.lang.Integer">
             <column name="tot_E_attiva_F1" />

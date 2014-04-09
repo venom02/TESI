@@ -1,6 +1,6 @@
 package com.rigers.db;
 
-// Generated 7-apr-2014 11.05.46 by Hibernate Tools 3.4.0.CR1
+// Generated 9-apr-2014 10.10.47 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class MeterAcqua implements java.io.Serializable {
 
-	private MeterAcquaId id;
+	private int idLettura;
 	private LetturaDispositivo letturaDispositivo;
 	private Integer currentReadoutValue;
 	private Integer periodicReadoutValue;
@@ -31,12 +31,12 @@ public class MeterAcqua implements java.io.Serializable {
 		this.periodicReadingDate = periodicReadingDate;
 	}
 
-	public MeterAcquaId getId() {
-		return this.id;
+	public int getIdLettura() {
+		return this.idLettura;
 	}
 
-	public void setId(MeterAcquaId id) {
-		this.id = id;
+	public void setIdLettura(int idLettura) {
+		this.idLettura = idLettura;
 	}
 
 	public LetturaDispositivo getLetturaDispositivo() {
