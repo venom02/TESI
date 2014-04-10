@@ -2,6 +2,7 @@ package com.rigers.API;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -23,8 +24,7 @@ public class MeterAcquaStats extends Tools {
 		this.edificio = edificio;
 	}
 	
-	public MeterAcqua monthAverage(int month) {
-		MeterAcqua meterAcqua = null; 
+	private List<MeterAcqua> getMonthList(int month){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();		
 
@@ -47,17 +47,60 @@ public class MeterAcquaStats extends Tools {
 		query.setParameter("dateFrom", dateFrom);
 		query.setParameter("edificio", edificio.getIdEdificio());
 		List<MeterAcqua> list = query.list();
-		int i = 0;
-		ArrayList<Integer> curReadValList = new ArrayList<Integer>();
-		for(MeterAcqua element : list){
-			curReadValList.add(element.getCurrentReadoutValue());
-			System.out.println(curReadValList.get(i));
-			i++;
+		
+		session.getTransaction().commit();
+		return list;
+	}
+	
+	public MeterAcqua monthAverage(int month) {
+		MeterAcqua meterAcqua = new MeterAcqua(); 
+		
+		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
+		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		
+		for(MeterAcqua element : getMonthList(month)){
+			currentReadoutValueList.add(element.getCurrentReadoutValue());
+			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
 		}
 		
-		meterAcqua.setCurrentReadoutValue(calculateAverage(curReadValList));
-		System.out.println(meterAcqua.getCurrentReadoutValue());
+		meterAcqua.setCurrentReadoutValue(average(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(average(periodicReadoutValueList));
 		
 		return meterAcqua;
 	}
+	
+	public MeterAcqua monthMax(int month){
+		MeterAcqua meterAcqua = new MeterAcqua();
+		
+		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
+		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		
+		for(MeterAcqua element : getMonthList(month)){
+			currentReadoutValueList.add(element.getCurrentReadoutValue());
+			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+		}
+		
+		meterAcqua.setCurrentReadoutValue(Collections.max(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections.max(periodicReadoutValueList));
+				
+		return meterAcqua;
+	}
+	
+	public MeterAcqua monthMin(int month){
+		MeterAcqua meterAcqua = new MeterAcqua();
+		
+		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
+		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		
+		for(MeterAcqua element : getMonthList(month)){
+			currentReadoutValueList.add(element.getCurrentReadoutValue());
+			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+		}
+		
+		meterAcqua.setCurrentReadoutValue(Collections.min(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections.min(periodicReadoutValueList));
+				
+		return meterAcqua;
+	}
+	
 }

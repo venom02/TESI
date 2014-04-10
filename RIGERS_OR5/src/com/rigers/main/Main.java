@@ -1,17 +1,8 @@
 package com.rigers.main;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import com.rigers.API.MeterAcquaStats;
-import com.rigers.GUI.GUI;
 import com.rigers.db.Edificio;
-import com.rigers.db.LetturaDispositivo;
-import com.rigers.persistence.HibernateUtil;
+import com.rigers.db.MeterAcqua;
 
 public class Main {
 	@SuppressWarnings("deprecation")
@@ -19,9 +10,20 @@ public class Main {
 //		GUI.main(null);
 		Edificio edificio = new Edificio();
 		edificio.setIdEdificio(1);
+		int month = 7;
 		MeterAcquaStats meterAcquaStats = new MeterAcquaStats(edificio);
-		meterAcquaStats.monthAverage(7);
+		MeterAcqua media = meterAcquaStats.monthAverage(month);
+		MeterAcqua max = meterAcquaStats.monthMax(month);
+		MeterAcqua min = meterAcquaStats.monthMin(month);
 		
+		System.out.println("Current Readout Value");
+		System.out.println("AVG: " + media.getCurrentReadoutValue());
+		System.out.println("MAX: " + max.getCurrentReadoutValue());
+		System.out.println("MIN: " + min.getCurrentReadoutValue());
+		System.out.println("Periodic Readout Value");
+		System.out.println("AVG: " + media.getPeriodicReadoutValue());
+		System.out.println("MAX: " + max.getPeriodicReadoutValue());
+		System.out.println("MIN: " + min.getPeriodicReadoutValue());
 	}
 	
 }

@@ -30,7 +30,7 @@ public class Tools {
 	 * @param marks
 	 * @return
 	 */
-	protected int calculateAverage(List <Integer> marks) {
+	protected int average(List <Integer> marks) {
 		  Integer sum = 0;
 		  if(!marks.isEmpty()) {
 		    for (Integer mark : marks) {
