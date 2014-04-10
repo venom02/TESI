@@ -25,17 +25,17 @@ public class DbManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 
-		flushTables(session);
-
-		fillCompartimento(session);
-
-		fillEdificio(session);
-
-		fillLetturaRipartitoreCalore(session);
+//		flushTables(session);
+//
+//		fillCompartimento(session);
+//
+//		fillEdificio(session);
+//
+//		fillLetturaRipartitoreCalore(session);
 		
 		fillLetturaAcqua(session);
 		
-		fillLetturaSonde(session);
+//		fillLetturaSonde(session);
 
 		session.getTransaction().commit();
 	}

@@ -109,7 +109,11 @@ public class DataView {
 		session.beginTransaction();
 
 		Query query = session
-				.createQuery("from LetturaDispositivo where dataLettura > :dateFrom and dataLettura < :dateTo and idDispositivo = :dispId order by dataLettura desc");
+				.createQuery("from LetturaDispositivo "
+						+ "where dataLettura > :dateFrom "
+						+ "and dataLettura < :dateTo "
+						+ "and idDispositivo = :dispId "
+						+ "order by dataLettura desc");
 		query.setParameter("dispId", dispId);
 		query.setParameter("dateFrom", dateFrom);
 		query.setParameter("dateTo", dateTo);

@@ -56,9 +56,9 @@ public class GUI {
 	private Spinner spinnerIdEdificio;
 	private Combo comboSelectComp;
 	private Label lblEdifInsert;
-	private Combo comboSelectEdif;
-	private Combo comboSelectComp2;
-	private Combo comboSelectDisp;
+	private Combo comboEdif2;
+	private Combo comboComp2;
+	private Combo comboDisp2;
 	private org.eclipse.swt.widgets.List listLettureDispositivo;
 	private Combo comboComp;
 	private Combo comboEdif;
@@ -191,7 +191,7 @@ public class GUI {
 					lblCompInsert.setText("OK");
 					System.out.println("success!");
 					comboSelectComp.setItems(DataView.CompItems());
-					comboSelectComp2.setItems(DataView.CompItems());
+					comboComp2.setItems(DataView.CompItems());
 				} else {
 					lblCompInsert.setForeground(SWTResourceManager
 							.getColor(SWT.COLOR_DARK_RED));
@@ -265,7 +265,7 @@ public class GUI {
 							.getColor(SWT.COLOR_DARK_GREEN));
 					lblEdifInsert.setText("OK");
 					System.out.println("success!");
-					comboSelectEdif.setItems(DataView.EdifItems());
+					comboEdif2.setItems(DataView.EdifItems());
 				} else {
 					lblEdifInsert.setForeground(SWTResourceManager
 							.getColor(SWT.COLOR_DARK_RED));
@@ -436,40 +436,47 @@ public class GUI {
 				false, 1, 1));
 		lblEdificio_1.setText("Compartimento");
 
-		comboSelectComp2 = new Combo(grpLettura, SWT.READ_ONLY);
-		comboSelectComp2.setItems(compItems);
+		comboComp2 = new Combo(grpLettura, SWT.READ_ONLY);
+		comboComp2.setItems(compItems);
 		GridData gd_comboSelectComp2 = new GridData(SWT.FILL, SWT.CENTER,
 				false, false, 1, 1);
 		gd_comboSelectComp2.widthHint = 120;
-		comboSelectComp2.setLayoutData(gd_comboSelectComp2);
+		comboComp2.setLayoutData(gd_comboSelectComp2);
+		comboComp2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+					comboEdif2.setItems(DataView.EdifItems(comboComp2.getText()));
+			}
+		});
 
 		Label lblEdificio_2 = new Label(grpLettura, SWT.NONE);
 		lblEdificio_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		lblEdificio_2.setText("Edificio");
 
-		comboSelectEdif = new Combo(grpLettura, SWT.READ_ONLY);
-		comboSelectEdif.setItems(edifItems);
+		comboEdif2 = new Combo(grpLettura, SWT.READ_ONLY);
+		comboEdif2.setItems(edifItems);
 		GridData gd_comboSelectEdif = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
 		gd_comboSelectEdif.widthHint = 120;
-		comboSelectEdif.setLayoutData(gd_comboSelectEdif);
+		comboEdif2.setLayoutData(gd_comboSelectEdif);
 
 		Label lblDispositivo_1 = new Label(grpLettura, SWT.NONE);
 		lblDispositivo_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
 		lblDispositivo_1.setText("Dispositivo");
 
-		comboSelectDisp = new Combo(grpLettura, SWT.READ_ONLY);
+		comboDisp2 = new Combo(grpLettura, SWT.READ_ONLY);
 
-		comboSelectDisp.setItems(dispList);
+		comboDisp2.setItems(dispList);
+		comboDisp2.remove(6);
 
-		comboSelectDisp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+		comboDisp2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		comboSelectDisp.addSelectionListener(new SelectionAdapter() {
+		comboDisp2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				switch (comboSelectDisp.getText()) {
+				switch (comboDisp2.getText()) {
 				case "Meter Acqua":
 					compDevLayout.topControl = grpMeterAcqua;
 					compositeDevices.layout();
