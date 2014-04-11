@@ -15,7 +15,6 @@ public class Main {
 //		GUI.main(null);
 		StatsGUI.main(null);
 //		testMeterAcquaStats();
-			
 	}
 	
 	//TEST TEST TEST

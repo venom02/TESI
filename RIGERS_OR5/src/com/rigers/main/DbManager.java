@@ -31,9 +31,9 @@ public class DbManager {
 //
 //		fillEdificio(session);
 //
-//		fillLetturaRipartitoreCalore(session);
+		fillLetturaRipartitoreCalore(session);
 		
-		fillLetturaAcqua(session);
+//		fillLetturaAcqua(session);
 		
 //		fillLetturaSonde(session);
 

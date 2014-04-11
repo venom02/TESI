@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.rigers.db.*;
+import com.rigers.db.Edificio;
+import com.rigers.db.LetturaDispositivo;
+import com.rigers.db.MeterAcqua;
 import com.rigers.persistence.HibernateUtil;
 
 public class MeterAcquaStats extends Tools {
