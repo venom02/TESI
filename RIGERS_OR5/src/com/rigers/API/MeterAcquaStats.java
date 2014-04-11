@@ -242,7 +242,7 @@ public class MeterAcquaStats extends Tools {
 		}else {
 			meterAcqua.setPeriodicReadoutValue(0);
 		}
-		
+
 		return meterAcqua;
 	}
 
@@ -273,33 +273,40 @@ public class MeterAcquaStats extends Tools {
 		}else {
 			meterAcqua.setPeriodicReadoutValue(0);
 		}
-		
+
 		return meterAcqua;
 	}
 
 	public MeterAcqua actual(int year, int month, int day){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();	
-		
+
 		Calendar cal = Calendar.getInstance();
-		cal.set(year, month, day);
-		Date date = cal.getTime();
-		
+		cal.set(year, month, day, 0, 0, 0);
+		Date dateFrom = cal.getTime();
+		cal.set(year, month, day+1, 0, 0, 0);
+		Date dateTo = cal.getTime();
+
 		String queryStr = "SELECT m " 
 				+ "FROM MeterAcqua as m "
 				+ "WHERE m.idLettura IN (select l.idLettura "
 				+ "from LetturaDispositivo as l "
-				+ "WHERE l.dataLettura= :date "
+				+ "WHERE l.dataLettura< :dateTo "
+				+ "AND l.dataLettura> :dateFrom "
 				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
 		Query query = session.createQuery(queryStr);
-		query.setParameter("date", date);
+		query.setParameter("dateFrom", dateFrom);
+		query.setParameter("dateTo", dateTo);
 		query.setParameter("edificio", edificio.getIdEdificio());
-        query.setMaxResults(1);
-        MeterAcqua meterAcqua = (MeterAcqua) query.uniqueResult();
-		
-        session.getTransaction().commit();
-		return meterAcqua;
-		
+		query.setMaxResults(1);
+		List<MeterAcqua> meterAcqua = query.list();
+		session.getTransaction().commit();
+				
+		if (!meterAcqua.isEmpty()) {
+			return meterAcqua.get(0);
+		} else{
+			return new MeterAcqua(new LetturaDispositivo(),0,0,new Date(0, 0, 1, 0, 0, 0));
+		}
 	}
 
 }
