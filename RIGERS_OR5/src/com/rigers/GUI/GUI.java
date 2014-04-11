@@ -391,7 +391,8 @@ public class GUI {
 
 				int dispIndex = comboDisp.getSelectionIndex();
 				if (dispIndex == 6) {
-					listLettureDispositivo.setItems(DataView.LettureItems(dateFrom, dateTo));
+					listLettureDispositivo.setItems(DataView.LettureItems(
+							dateFrom, dateTo));
 				} else {
 					if (comboEdif.getText().equals("*")) {
 						listLettureDispositivo.setItems(DataView.LettureItems(
@@ -445,7 +446,7 @@ public class GUI {
 		comboComp2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-					comboEdif2.setItems(DataView.EdifItems(comboComp2.getText()));
+				comboEdif2.setItems(DataView.EdifItems(comboComp2.getText()));
 			}
 		});
 
