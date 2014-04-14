@@ -275,14 +275,14 @@ public class MeterAcquaStats extends Tools {
 		return meterAcqua;
 	}
 
-	public MeterAcqua actual(int year, int month, int day){
+	public List<MeterAcqua> dayList(int year, int month, int day){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();	
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, day, 0, 0, 0);
 		Date dateFrom = cal.getTime();
-		cal.set(year, month, day+1, 0, 0, 0);
+		cal.add(Calendar.DATE, 1);
 		Date dateTo = cal.getTime();
 
 		String queryStr = "SELECT m " 
@@ -296,15 +296,25 @@ public class MeterAcquaStats extends Tools {
 		query.setParameter("dateFrom", dateFrom);
 		query.setParameter("dateTo", dateTo);
 		query.setParameter("edificio", edificio.getIdEdificio());
-		query.setMaxResults(1);
-		List<MeterAcqua> meterAcqua = query.list();
+		List<MeterAcqua> meterAcquaDayList = query.list();
 		session.getTransaction().commit();
 				
-		if (!meterAcqua.isEmpty()) {
-			return meterAcqua.get(0);
-		} else{
-			return new MeterAcqua(new LetturaDispositivo(),0,0,new Date(0, 0, 1, 0, 0, 0));
+		if (meterAcquaDayList.isEmpty()) {
+				meterAcquaDayList.add(new MeterAcqua(new LetturaDispositivo(),0,0,new Date(0, 0, 1, 0, 0, 0)));
 		}
+		return meterAcquaDayList;
+	}
+	
+	public String[] dayCRVStrings(int year, int month, int day){
+		List<MeterAcqua> list = dayList(year, month, day);
+		String[] dayCRVStrings = new String[list.size()];
+		
+		for(int i=0; i<list.size(); i++){
+			dayCRVStrings[i]=list.get(i).getCurrentReadoutValue().toString();
+		}
+		
+		return dayCRVStrings;
 	}
 
+	
 }

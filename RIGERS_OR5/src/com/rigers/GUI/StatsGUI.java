@@ -1,5 +1,6 @@
 package com.rigers.GUI;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.swt.widgets.Combo;
@@ -50,7 +51,6 @@ public class StatsGUI {
 	private Text textPRVmaxMonth;
 	private Text textPRVminMonth;
 	private Text textPRVavgWeek;
-	private Text textCRVactual;
 	private Text textPRVactual;
 	private Text textPRDactual;
 	private Text textPRVmaxWeek;
@@ -62,6 +62,7 @@ public class StatsGUI {
 	private Text textUCmaxWeek;
 	private Text textUCminWeek;
 	private Text textUCactual;
+	private List listCRVday;
 
 	/**
 	 * Launch the application.
@@ -99,7 +100,7 @@ public class StatsGUI {
 		shell = new Shell();
 		shell.setMinimumSize(new Point(800, 600));
 		shell.setSize(450, 300);
-		shell.setText("SWT Application");
+		shell.setText("RIGERS - Statistiche");
 		shell.setLayout(new GridLayout(1, false));
 		
 		composite = new Composite(shell, SWT.NONE);
@@ -280,13 +281,11 @@ public class StatsGUI {
 				false, 1, 1));
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 
-		Label lblAttuale = new Label(compositeTabMeterAcqua, SWT.NONE);
-		lblAttuale.setText("Attuale");
-
-		textCRVactual = new Text(compositeTabMeterAcqua, SWT.BORDER);
-		textCRVactual.setEditable(false);
-		textCRVactual.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
+		Label lblDay = new Label(compositeTabMeterAcqua, SWT.NONE);
+		lblDay.setText("Giorno");
+		
+		listCRVday = new List(compositeTabMeterAcqua, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		listCRVday.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 
@@ -361,11 +360,6 @@ public class StatsGUI {
 		textPRDactual.setEditable(false);
 		textPRDactual.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 2, 1));
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		
 		TabItem tbtmMeterRipartitoreCalore = new TabItem(tabResults, SWT.NONE);
@@ -464,9 +458,7 @@ public class StatsGUI {
 
 	private void meterAcquaTab() {
 		MeterAcquaStats meterAcquaStats = new MeterAcquaStats(edificio);
-		
-		MeterAcqua actual = meterAcquaStats.actual(year, month, date);
-		
+				
 		MeterAcqua avgMon = meterAcquaStats.monthAverage(month);
 		MeterAcqua maxMon = meterAcquaStats.monthMax(month);
 		MeterAcqua minMon = meterAcquaStats.monthMin(month);
@@ -491,9 +483,9 @@ public class StatsGUI {
 		textPRVmaxWeek.setText(maxWeek.getPeriodicReadoutValue().toString());
 		textPRVminWeek.setText(minWeek.getPeriodicReadoutValue().toString());
 		
-		textCRVactual.setText(actual.getCurrentReadoutValue().toString());
-		textPRVactual.setText(actual.getPeriodicReadoutValue().toString());
-		textPRDactual.setText(actual.getPeriodicReadingDate().toString());
+		listCRVday.setItems(meterAcquaStats.dayCRVStrings(year, month, date));
+//		textPRVactual.setText(actual.getPeriodicReadoutValue().toString());
+//		textPRDactual.setText(actual.getPeriodicReadingDate().toString());
 	}
 	
 	protected void meterRipartitoreCaloreTab() {

@@ -11,6 +11,7 @@ import java.util.Random;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.ibm.icu.util.Calendar;
 import com.rigers.db.*;
 import com.rigers.persistence.HibernateUtil;
 
@@ -25,17 +26,17 @@ public class DbManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 
-//		flushTables(session);
-//
-//		fillCompartimento(session);
-//
-//		fillEdificio(session);
-//
-		fillLetturaRipartitoreCalore(session);
-		
-//		fillLetturaAcqua(session);
-		
-//		fillLetturaSonde(session);
+		//		flushTables(session);
+		//
+		//		fillCompartimento(session);
+		//
+		//		fillEdificio(session);
+		//
+		//		fillLetturaRipartitoreCalore(session);
+
+		fillLetturaAcqua(session);
+
+		//		fillLetturaSonde(session);
 
 		session.getTransaction().commit();
 	}
@@ -57,7 +58,7 @@ public class DbManager {
 					idMeter, ediList.get(i));
 
 			// PK Meter Sonde
-			
+
 			// INSERT Ripartitore Calore
 			MeterSonde meterSonde = new MeterSonde(lettDisp);
 			meterSonde.setIdLettura(lettDisp.getIdLettura());
@@ -67,7 +68,7 @@ public class DbManager {
 			meterSonde.setTempLocali(generator.nextInt(7)+18);
 			session.save(meterSonde);
 		}
-		
+
 	}
 
 	/**
@@ -82,18 +83,24 @@ public class DbManager {
 		// Generatore Valori Casuali
 		Random generator = new Random();
 
-		for (int i = 0; i < ediList.size(); i++) {
-			LetturaDispositivo lettDisp = generateLettura(session,
-					idMeter, ediList.get(i));
+		Calendar cal = Calendar.getInstance();
+		cal.set(2014, 0, 1, 0, 0, 0);
+		for (int i = 0; i < 30; i++) {
+			cal.set(Calendar.HOUR, 0);
+			cal.add(Calendar.DATE, 1);
+			for(int j = 0; j<4; j++){
+				cal.add(Calendar.HOUR, 6);
+				Date date = cal.getTime();
+				LetturaDispositivo lettDisp = generateLettura(session, idMeter, ediList.get(0), date);
 
-			
-			// INSERT MeterAcqua
-			MeterAcqua meterAcqua = new MeterAcqua(lettDisp);
-			meterAcqua.setIdLettura(lettDisp.getIdLettura());
-			meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
-			meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
-			meterAcqua.setPeriodicReadingDate(new Date());
-			session.save(meterAcqua);
+				// INSERT MeterAcqua
+				MeterAcqua meterAcqua = new MeterAcqua(lettDisp);
+				meterAcqua.setIdLettura(lettDisp.getIdLettura());
+				meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
+				meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
+				meterAcqua.setPeriodicReadingDate(new Date());
+				session.save(meterAcqua);
+			}
 		}
 	}
 
@@ -113,7 +120,7 @@ public class DbManager {
 			LetturaDispositivo lettDisp = generateLettura(session,
 					idMeter, ediList.get(i));
 
-		
+
 			// INSERT Meter Ripartitore Calore
 			MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
 					lettDisp, unitaConsumo.nextInt(500));
@@ -141,6 +148,19 @@ public class DbManager {
 		int mmin = generator.nextInt(60);
 		int ss = generator.nextInt(60);
 		Date date = new Date(114, mm, dd, hh, mmin, ss);
+
+		// Creazione oggetto dispositivo senza richiamare una ulteriore query
+		DispositivoId id = new DispositivoId(idDispositivo,
+				edificio.getIdEdificio());
+		Dispositivo dispositivo = new Dispositivo(id, edificio);
+
+		// INSERT lettura dispositivo
+		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo, date);
+		session.save(lettDisp);
+		return lettDisp;
+	}
+
+	private static LetturaDispositivo generateLettura(Session session, int idDispositivo, Edificio edificio, Date date){
 
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
