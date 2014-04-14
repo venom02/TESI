@@ -51,8 +51,7 @@ public class StatsGUI {
 	private Text textPRVmaxMonth;
 	private Text textPRVminMonth;
 	private Text textPRVavgWeek;
-	private Text textPRVactual;
-	private Text textPRDactual;
+	private Text textPRVavgDay;
 	private Text textPRVmaxWeek;
 	private Text textPRVminWeek;
 	private Text textUCavgMonth;
@@ -62,7 +61,12 @@ public class StatsGUI {
 	private Text textUCmaxWeek;
 	private Text textUCminWeek;
 	private Text textUCactual;
-	private List listCRVday;
+	private Text textCRVavgDay;
+	private Text textCRVmaxDay;
+	private Text textCRVminDay;
+	private Text textPRVmaxDay;
+	private Text textPRVminDay;
+	private List listPRD;
 
 	/**
 	 * Launch the application.
@@ -102,7 +106,7 @@ public class StatsGUI {
 		shell.setSize(450, 300);
 		shell.setText("RIGERS - Statistiche");
 		shell.setLayout(new GridLayout(1, false));
-		
+
 		composite = new Composite(shell, SWT.NONE);
 		ViewDataTab();
 
@@ -173,7 +177,7 @@ public class StatsGUI {
 				edificio = new Edificio();
 				edificio.setIdEdificio(Integer.parseInt(comboEdif.getText().substring(
 						0, comboEdif.getText().indexOf(":"))));
-				
+
 				meterAcquaTab();
 				meterRipartitoreCaloreTab();
 
@@ -192,10 +196,10 @@ public class StatsGUI {
 
 		TabItem tbtmMeterAcqua = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterAcqua.setText("Meter Acqua");
-		
+
 		TabItem tbtmMeterElettrico = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterElettrico.setText("Meter Elettrico");
-		
+
 		TabItem tbtmMeterGas = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterGas.setText("Meter Gas");
 
@@ -283,11 +287,18 @@ public class StatsGUI {
 
 		Label lblDay = new Label(compositeTabMeterAcqua, SWT.NONE);
 		lblDay.setText("Giorno");
-		
-		listCRVday = new List(compositeTabMeterAcqua, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		listCRVday.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
+
+		textCRVavgDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textCRVavgDay.setEditable(false);
+		textCRVavgDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+
+		textCRVmaxDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textCRVmaxDay.setEditable(false);
+		textCRVmaxDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+
+		textCRVminDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textCRVminDay.setEditable(false);
+		textCRVminDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Label lblPeriodicReadoutValue = new Label(compositeTabMeterAcqua,
 				SWT.NONE);
@@ -324,120 +335,123 @@ public class StatsGUI {
 		textPRVavgWeek.setEditable(false);
 		textPRVavgWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		
+
 		textPRVmaxWeek = new Text(compositeTabMeterAcqua, SWT.BORDER);
 		textPRVmaxWeek.setEditable(false);
 		textPRVmaxWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+
 		textPRVminWeek = new Text(compositeTabMeterAcqua, SWT.BORDER);
 		textPRVminWeek.setEditable(false);
 		textPRVminWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 
 		Label lblAttuale_1 = new Label(compositeTabMeterAcqua, SWT.NONE);
-		lblAttuale_1.setText("Attuale");
+		lblAttuale_1.setText("Giorno");
 
-		textPRVactual = new Text(compositeTabMeterAcqua, SWT.BORDER);
-		textPRVactual.setEditable(false);
-		textPRVactual.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+		textPRVavgDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textPRVavgDay.setEditable(false);
+		textPRVavgDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
+
+		textPRVmaxDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textPRVmaxDay.setEditable(false);
+		textPRVmaxDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+
+		textPRVminDay = new Text(compositeTabMeterAcqua, SWT.BORDER);
+		textPRVminDay.setEditable(false);
+		textPRVminDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Label lblPeriodicReadingDate = new Label(compositeTabMeterAcqua,
 				SWT.NONE);
-		lblPeriodicReadingDate.setText("Periodic Reading Date");
+		lblPeriodicReadingDate.setText("Letture del giorno");
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-		new Label(compositeTabMeterAcqua, SWT.NONE);
-
-		Label lblAttuale_2 = new Label(compositeTabMeterAcqua, SWT.NONE);
-		lblAttuale_2.setText("Attuale");
-
-		textPRDactual = new Text(compositeTabMeterAcqua, SWT.BORDER);
-		textPRDactual.setEditable(false);
-		textPRDactual.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 2, 1));
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		
+				listPRD = new List(compositeTabMeterAcqua, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+				GridData gd_listPRD = new GridData(SWT.FILL, SWT.CENTER, false, false, 5, 1);
+				gd_listPRD.heightHint = 70;
+				listPRD.setLayoutData(gd_listPRD);
+		new Label(compositeTabMeterAcqua, SWT.NONE);
+		new Label(compositeTabMeterAcqua, SWT.NONE);
+		new Label(compositeTabMeterAcqua, SWT.NONE);
+		new Label(compositeTabMeterAcqua, SWT.NONE);
+		new Label(compositeTabMeterAcqua, SWT.NONE);
+
+
 		TabItem tbtmMeterRipartitoreCalore = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterRipartitoreCalore.setText("Meter Ripartitore Calore");
-		
+
 		Composite compositeTabRipCalore = new Composite(tabResults, SWT.NONE);
 		tbtmMeterRipartitoreCalore.setControl(compositeTabRipCalore);
 		compositeTabRipCalore.setLayout(new GridLayout(5, false));
 		new Label(compositeTabRipCalore, SWT.NONE);
 		new Label(compositeTabRipCalore, SWT.NONE);
-		
+
 		Label label = new Label(compositeTabRipCalore, SWT.NONE);
 		GridData gd_label = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label.widthHint = 100;
 		label.setLayoutData(gd_label);
 		label.setText("Media");
-		
+
 		Label label_1 = new Label(compositeTabRipCalore, SWT.NONE);
 		GridData gd_label_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label_1.widthHint = 100;
 		label_1.setLayoutData(gd_label_1);
 		label_1.setText("Max");
-		
+
 		Label label_2 = new Label(compositeTabRipCalore, SWT.NONE);
 		GridData gd_label_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label_2.widthHint = 100;
 		label_2.setLayoutData(gd_label_2);
 		label_2.setText("Min");
-		
+
 		Label lblUnitaConsumo = new Label(compositeTabRipCalore, SWT.NONE);
 		lblUnitaConsumo.setText("Unita Consumo");
 		new Label(compositeTabRipCalore, SWT.NONE);
-		new Label(compositeTabRipCalore, SWT.NONE);
-		new Label(compositeTabRipCalore, SWT.NONE);
-		new Label(compositeTabRipCalore, SWT.NONE);
-		new Label(compositeTabRipCalore, SWT.NONE);
-		
+
 		Label label_4 = new Label(compositeTabRipCalore, SWT.NONE);
 		GridData gd_label_4 = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_label_4.widthHint = 100;
 		label_4.setLayoutData(gd_label_4);
 		label_4.setText("Mese");
-		
+
 		textUCavgMonth = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCavgMonth.setEditable(false);
 		textUCavgMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+
 		textUCmaxMonth = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCmaxMonth.setEditable(false);
 		textUCmaxMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+
 		textUCminMonth = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCminMonth.setEditable(false);
 		textUCminMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(compositeTabRipCalore, SWT.NONE);
-		
+
 		Label label_5 = new Label(compositeTabRipCalore, SWT.NONE);
 		GridData gd_label_5 = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_label_5.widthHint = 100;
 		label_5.setLayoutData(gd_label_5);
 		label_5.setText("Settimana");
-		
+
 		textUCavgWeek = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCavgWeek.setEditable(false);
 		textUCavgWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+
 		textUCmaxWeek = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCmaxWeek.setEditable(false);
 		textUCmaxWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+
 		textUCminWeek = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCminWeek.setEditable(false);
 		textUCminWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(compositeTabRipCalore, SWT.NONE);
-		
+
 		Label label_6 = new Label(compositeTabRipCalore, SWT.NONE);
 		label_6.setText("Attuale");
-		
+
 		textUCactual = new Text(compositeTabRipCalore, SWT.BORDER);
 		textUCactual.setEditable(false);
 		textUCactual.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -448,24 +462,32 @@ public class StatsGUI {
 		new Label(compositeTabRipCalore, SWT.NONE);
 		new Label(compositeTabRipCalore, SWT.NONE);
 		new Label(compositeTabRipCalore, SWT.NONE);
-		
+		new Label(compositeTabRipCalore, SWT.NONE);
+		new Label(compositeTabRipCalore, SWT.NONE);
+		new Label(compositeTabRipCalore, SWT.NONE);
+		new Label(compositeTabRipCalore, SWT.NONE);
+
 		TabItem tbtmSonde = new TabItem(tabResults, SWT.NONE);
 		tbtmSonde.setText("Sonde");
-		
+
 		TabItem tbtmMeterTermie = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterTermie.setText("Meter Termie");
 	}
 
 	private void meterAcquaTab() {
 		MeterAcquaStats meterAcquaStats = new MeterAcquaStats(edificio);
-				
-		MeterAcqua avgMon = meterAcquaStats.monthAverage(month);
-		MeterAcqua maxMon = meterAcquaStats.monthMax(month);
-		MeterAcqua minMon = meterAcquaStats.monthMin(month);
-		
+
+		MeterAcqua avgMon = meterAcquaStats.monthAverage(year, month);
+		MeterAcqua maxMon = meterAcquaStats.monthMax(year, month);
+		MeterAcqua minMon = meterAcquaStats.monthMin(year, month);
+
 		MeterAcqua avgWeek = meterAcquaStats.weekAverage(year, month, date);
 		MeterAcqua maxWeek = meterAcquaStats.weekMax(year, month, date);
 		MeterAcqua minWeek = meterAcquaStats.weekMin(year, month, date);
+
+		MeterAcqua avgDay = meterAcquaStats.dayAverage(year, month, date);
+		MeterAcqua maxDay = meterAcquaStats.dayMax(year, month, date);
+		MeterAcqua minDay = meterAcquaStats.dayMin(year, month, date);
 
 		textCRVavgMonth.setText(avgMon.getCurrentReadoutValue().toString());
 		textCRVmaxMonth.setText(maxMon.getCurrentReadoutValue().toString());
@@ -474,43 +496,50 @@ public class StatsGUI {
 		textCRVminWeek.setText(minWeek.getCurrentReadoutValue().toString());
 		textCRVmaxWeek.setText(maxWeek.getCurrentReadoutValue().toString());
 		textCRVavgWeek.setText(avgWeek.getCurrentReadoutValue().toString());
-		
+
+		textCRVavgDay.setText(avgDay.getCurrentReadoutValue().toString());
+		textCRVmaxDay.setText(maxDay.getCurrentReadoutValue().toString());
+		textCRVminDay.setText(minDay.getCurrentReadoutValue().toString());
+
 		textPRVavgMonth.setText(avgMon.getPeriodicReadoutValue().toString());
 		textPRVmaxMonth.setText(maxMon.getPeriodicReadoutValue().toString());
 		textPRVminMonth.setText(minMon.getPeriodicReadoutValue().toString());
-		
+
 		textPRVavgWeek.setText(avgWeek.getPeriodicReadoutValue().toString());
 		textPRVmaxWeek.setText(maxWeek.getPeriodicReadoutValue().toString());
 		textPRVminWeek.setText(minWeek.getPeriodicReadoutValue().toString());
-		
-		listCRVday.setItems(meterAcquaStats.dayCRVStrings(year, month, date));
-//		textPRVactual.setText(actual.getPeriodicReadoutValue().toString());
-//		textPRDactual.setText(actual.getPeriodicReadingDate().toString());
+
+		textPRVavgDay.setText(avgDay.getPeriodicReadoutValue().toString());
+		textPRVmaxDay.setText(maxDay.getPeriodicReadoutValue().toString());
+		textPRVminDay.setText(minDay.getPeriodicReadoutValue().toString());
+
+		listPRD.setItems(meterAcquaStats.dayReadings(year, month, date));
+
 	}
-	
+
 	protected void meterRipartitoreCaloreTab() {
 		MeterRipartitoreCaloreStats meterRipCalStats = new MeterRipartitoreCaloreStats(edificio);
-		
+
 		MeterRipartitoreCalore actual = meterRipCalStats.actual(year, month, date);
-		
+
 		MeterRipartitoreCalore avgMonth = meterRipCalStats.monthAverage(month);
 		MeterRipartitoreCalore maxMonth = meterRipCalStats.monthMax(month);
 		MeterRipartitoreCalore minMonth = meterRipCalStats.monthMin(month);
-		
+
 		MeterRipartitoreCalore avgWeek = meterRipCalStats.weekAverage(year, month, date);
 		MeterRipartitoreCalore maxWeek = meterRipCalStats.weekMax(year, month, date);
 		MeterRipartitoreCalore minWeek = meterRipCalStats.weekMin(year, month, date);
-		
+
 		textUCactual.setText(actual.getUnitaConsumo().toString());
-		
+
 		textUCavgMonth.setText(avgMonth.getUnitaConsumo().toString());
 		textUCmaxMonth.setText(maxMonth.getUnitaConsumo().toString());
 		textUCminMonth.setText(minMonth.getUnitaConsumo().toString());
-		
+
 		textUCavgWeek.setText(avgWeek.getUnitaConsumo().toString());
 		textUCmaxWeek.setText(maxWeek.getUnitaConsumo().toString());
 		textUCminWeek.setText(minWeek.getUnitaConsumo().toString());
-		
-		
+
+
 	}
 }
