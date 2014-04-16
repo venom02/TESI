@@ -17,7 +17,13 @@ import com.rigers.persistence.HibernateUtil;
 public class MeterSondeStats extends Tools {
 
 	private Edificio edificio;
-
+	private ArrayList<Integer> luminositaList = new ArrayList<Integer>();
+	private ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+	private ArrayList<Integer> tempEstList = new ArrayList<Integer>();
+	private ArrayList<Integer> tempIntList = new ArrayList<Integer>();
+	private ArrayList<Integer> tempDayList = new ArrayList<Integer>();
+	private ArrayList<Integer> solarimetroList = new ArrayList<Integer>();
+	private MeterSonde meterSonde;
 	/**
 	 * Costruttore. ottiene parametro edificio
 	 * 
@@ -82,10 +88,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde monthAverage(int year, int month) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getMonthList(year, month)) {
 			luminositaList.add(element.getLuminosita());
@@ -114,10 +117,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde monthMax(int year, int month) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getMonthList(year, month)) {
 			luminositaList.add(element.getLuminosita());
@@ -146,10 +146,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde monthMin(int year, int month) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getMonthList(year, month)) {
 			luminositaList.add(element.getLuminosita());
@@ -203,10 +200,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde weekMin(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getWeekList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
@@ -237,10 +231,8 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde weekMax(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
+		meterSonde = new MeterSonde();
 
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
 
 		for (MeterSonde element : getWeekList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
@@ -271,10 +263,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde weekAverage(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getWeekList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
@@ -323,10 +312,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde dayAverage(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
@@ -356,10 +342,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde dayMax(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+		meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
@@ -390,10 +373,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde dayMin(int year, int month, int date) {
-		MeterSonde meterSonde = new MeterSonde();
-
-		ArrayList<Integer> luminositaList = new ArrayList<Integer>();
-		ArrayList<Integer> sismografoList = new ArrayList<Integer>();
+    	meterSonde = new MeterSonde();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
 			luminositaList.add(element.getLuminosita());
