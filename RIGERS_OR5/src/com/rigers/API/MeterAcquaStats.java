@@ -9,8 +9,8 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.ibm.icu.text.NumberFormat;
 import com.rigers.db.Edificio;
-import com.rigers.db.LetturaDispositivo;
 import com.rigers.db.MeterAcqua;
 import com.rigers.persistence.HibernateUtil;
 
@@ -28,23 +28,14 @@ public class MeterAcquaStats extends Tools {
 	}
 
 	/**
-	 * genera una lista di oggetti MeterAcqua appartenenti solo al mese dato e
-	 * all'edificio prescelto
-	 * 
-	 * @param month
+	 * query di ricerca letture comprese nelle date assegnate come parametri
+	 * @param dateFrom
+	 * @param dateTo
 	 * @return
 	 */
-	private List<MeterAcqua> getMonthList(int year, int month) {
+	private List<MeterAcqua> queryList(Date dateFrom, Date dateTo) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-		Date dateTo = cal.getTime();
-		cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
-		Date dateFrom = cal.getTime();
 
 		String queryStr = "SELECT m " + "FROM MeterAcqua as m "
 				+ "WHERE m.idLettura IN (select l.idLettura "
@@ -59,6 +50,27 @@ public class MeterAcquaStats extends Tools {
 		List<MeterAcqua> list = query.list();
 
 		session.getTransaction().commit();
+		return list;
+	}
+
+	/**
+	 * genera una lista di oggetti MeterAcqua appartenenti solo al mese dato e
+	 * all'edificio prescelto
+	 * 
+	 * @param month
+	 * @return
+	 */
+	private List<MeterAcqua> getMonthList(int year, int month) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+		Date dateTo = cal.getTime();
+		cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
+		Date dateFrom = cal.getTime();
+
+		List<MeterAcqua> list = queryList(dateFrom, dateTo);
+
 		return list;
 	}
 
@@ -169,9 +181,6 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	private List<MeterAcqua> getWeekList(int year, int month, int date) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-
 		// Get calendar set to given date and time
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, date);
@@ -181,19 +190,7 @@ public class MeterAcquaStats extends Tools {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		Date dateTo = cal.getTime();
 
-		String queryStr = "SELECT m " + "FROM MeterAcqua as m "
-				+ "WHERE m.idLettura IN (select l.idLettura "
-				+ "from LetturaDispositivo as l "
-				+ "WHERE l.dataLettura< :dateTo "
-				+ "AND l.dataLettura>= :dateFrom "
-				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
-		Query query = session.createQuery(queryStr);
-		query.setParameter("dateTo", dateTo);
-		query.setParameter("dateFrom", dateFrom);
-		query.setParameter("edificio", edificio.getIdEdificio());
-
-		List<MeterAcqua> list = query.list();
-		session.getTransaction().commit();
+		List<MeterAcqua> list = queryList(dateFrom, dateTo);
 		return list;
 	}
 
@@ -307,28 +304,13 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	private List<MeterAcqua> getDayList(int year, int month, int date) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, date, 0, 0, 0);
 		Date dateFrom = cal.getTime();
 		cal.add(Calendar.DATE, 1);
 		Date dateTo = cal.getTime();
 
-		String queryStr = "SELECT m " + "FROM MeterAcqua as m "
-				+ "WHERE m.idLettura IN (select l.idLettura "
-				+ "from LetturaDispositivo as l "
-				+ "WHERE l.dataLettura< :dateTo "
-				+ "AND l.dataLettura>= :dateFrom "
-				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
-		Query query = session.createQuery(queryStr);
-		query.setParameter("dateFrom", dateFrom);
-		query.setParameter("dateTo", dateTo);
-		query.setParameter("edificio", edificio.getIdEdificio());
-
-		List<MeterAcqua> list = query.list();
-		session.getTransaction().commit();
+		List<MeterAcqua> list = queryList(dateFrom, dateTo);
 		return list;
 	}
 
@@ -445,10 +427,17 @@ public class MeterAcquaStats extends Tools {
 		List<MeterAcqua> list = getDayList(year, month, date);
 		String[] dayCRVStrings = new String[list.size()];
 
+		NumberFormat myFormat = NumberFormat.getInstance();
+		myFormat.setMinimumIntegerDigits(2);
+
 		for (int i = 0; i < list.size(); i++) {
-			dayCRVStrings[i] = "Current Reading Value: " + list.get(i).getCurrentReadoutValue()
-					+ "\t Periodic Reading Value: " + list.get(i).getPeriodicReadoutValue()
-					+ "\t Periodic Reading Date: " + list.get(i).getPeriodicReadingDate();
+			String CRV = myFormat.format(list.get(i).getCurrentReadoutValue());
+			String PRV = myFormat.format(list.get(i).getPeriodicReadoutValue());
+			String PRD = list.get(i).getPeriodicReadingDate().toString();
+
+			dayCRVStrings[i] = "Current Reading Value: " + CRV
+					+ "\t Periodic Reading Value: " + PRV
+					+ "\t Periodic Reading Date: " + PRD;
 		}
 
 		return dayCRVStrings;

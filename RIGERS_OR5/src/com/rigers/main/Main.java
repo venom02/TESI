@@ -14,9 +14,12 @@ public class Main {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 //		GUI.main(null);
-		StatsGUI.main(null);
+//		StatsGUI.main(null);
 //		testMeterAcquaStats();
-//		DbManager.fillDb();
+		Edificio edificio = new Edificio();
+		edificio.setIdEdificio(0);
+		DbManager db = new DbManager(edificio);
+		db.fillMonth(0);
 	}
 	
 }

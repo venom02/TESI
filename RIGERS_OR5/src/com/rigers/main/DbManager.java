@@ -17,98 +17,114 @@ import com.rigers.persistence.HibernateUtil;
 
 public class DbManager {
 
+	Edificio edificio;
+
+	public DbManager(Edificio edificio) {
+		this.edificio = edificio;
+	}
+
 	/**
 	 * Riempie con dati casuali il database rigers
 	 */
-	public static void fillDb() {
-
+	public static void fillDb(Edificio edificio) {
 		// Apertura sessione
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 
-		//		flushTables(session);
+		// flushTables(session);
 		//
-		//		fillCompartimento(session);
+		// fillCompartimento(session, 20);
 		//
-		//		fillEdificio(session);
+		// fillEdificio(session, 20);
 		//
-		//		fillLetturaRipartitoreCalore(session);
+		// fillLetturaRipartitoreCalore(session);
 
-		fillLetturaAcqua(session);
+		// fillLetturaAcqua(session);
 
-		//		fillLetturaSonde(session);
+		// fillLetturaSonde(session);
 
 		session.getTransaction().commit();
 	}
 
-	/**
-	 * Inserisce nelal tabella Meter_Sonde una lettura per ogni edificio esistente
-	 * @param session
-	 */
-	private static void fillLetturaSonde(Session session) {
-		int idMeter = 4; //Id meter sonde sempre uguale a 4;
-
-		List<Edificio> ediList = session.createQuery("from Edificio").list();
-
-		// Generatore Valori Casuali
-		Random generator = new Random();
-
-		for (int i = 0; i < ediList.size(); i++) {
-			LetturaDispositivo lettDisp = generateLettura(session,
-					idMeter, ediList.get(i));
-
-			// PK Meter Sonde
-
-			// INSERT Ripartitore Calore
-			MeterSonde meterSonde = new MeterSonde(lettDisp);
-			meterSonde.setIdLettura(lettDisp.getIdLettura());
-			meterSonde.setLuminosita(generator.nextInt(10));
-			meterSonde.setSismografo(generator.nextInt(100));
-			meterSonde.setTempEsterna(generator.nextInt(40));
-			meterSonde.setTempLocali(generator.nextInt(7)+18);
-			session.save(meterSonde);
-		}
-
-	}
-
-	/**
-	 * Inserisce nella tabella Meter_ripartitore_calore una lettura per ogni edificio esistente
-	 * @param session 
-	 */
-	private static void fillLetturaAcqua(Session session) {
-		int idMeter = 0; //Id meter acqua sempre uguale a 0;
-
-		List<Edificio> ediList = session.createQuery("from Edificio").list();
-
-		// Generatore Valori Casuali
-		Random generator = new Random();
-
+	public void fillMonth(int month) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
 		Calendar cal = Calendar.getInstance();
-		cal.set(2014, 0, 1, 0, 0, 0);
+		cal.set(2014, month, 1, 0, 0, 0);
 		for (int i = 0; i < 30; i++) {
 			cal.set(Calendar.HOUR, 0);
 			cal.add(Calendar.DATE, 1);
-			for(int j = 0; j<4; j++){
+			for (int j = 0; j < 4; j++) {
 				cal.add(Calendar.HOUR, 6);
 				Date date = cal.getTime();
-				LetturaDispositivo lettDisp = generateLettura(session, idMeter, ediList.get(0), date);
-
-				// INSERT MeterAcqua
-				MeterAcqua meterAcqua = new MeterAcqua(lettDisp);
-				meterAcqua.setIdLettura(lettDisp.getIdLettura());
-				meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
-				meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
-				meterAcqua.setPeriodicReadingDate(new Date());
-				session.save(meterAcqua);
+				// fillLetturaAcqua(session, date);
+				fillLetturaSonde(session, date);
 			}
 		}
+		session.getTransaction().commit();
 	}
 
 	/**
-	 * Inserisce nella tabella Meter_ripartitore_calore una lettura per ogni edificio esistente
-	 * @param session 
+	 * Inserisce nelal tabella Meter_Sonde una lettura per ogni edificio
+	 * esistente
+	 * 
+	 * @param session
+	 * @param date
 	 */
-	private static void fillLetturaRipartitoreCalore(Session session) {
+	private void fillLetturaSonde(Session session, Date date) {
+		int idMeter = 4; // Id meter sonde sempre uguale a 4;
+
+		// Generatore Valori Casuali
+		Random generator = new Random();
+
+		LetturaDispositivo lettDisp = generateLettura(session, idMeter,	edificio);
+
+		// PK Meter Sonde
+
+		// INSERT Ripartitore Calore
+		MeterSonde meterSonde = new MeterSonde(lettDisp);
+		meterSonde.setIdLettura(lettDisp.getIdLettura());
+		meterSonde.setLuminosita(generator.nextInt(10));
+		meterSonde.setSismografo(generator.nextInt(100));
+		meterSonde.setTempEsterna(generator.nextInt(40));
+		meterSonde.setTempLocali(generator.nextInt(7) + 18);
+		session.save(meterSonde);
+	}
+
+	/**
+	 * Inserisce nella tabella Meter_ripartitore_calore una lettura per ogni
+	 * edificio esistente
+	 * 
+	 * @param session
+	 */
+	private void fillLetturaAcqua(Session session, Date date) {
+		int idMeter = 0; // Id meter acqua sempre uguale a 0;
+
+		List<Edificio> ediList = session.createQuery("from Edificio").list();
+
+		// Generatore Valori Casuali
+		Random generator = new Random();
+
+		LetturaDispositivo lettDisp = generateLettura(session, idMeter,
+				edificio, date);
+
+		// INSERT MeterAcqua
+		MeterAcqua meterAcqua = new MeterAcqua(lettDisp);
+		meterAcqua.setIdLettura(lettDisp.getIdLettura());
+		meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
+		meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
+		meterAcqua.setPeriodicReadingDate(new Date());
+		session.save(meterAcqua);
+
+	}
+
+	/**
+	 * Inserisce nella tabella Meter_ripartitore_calore una lettura per ogni
+	 * edificio esistente
+	 * 
+	 * @param session
+	 */
+	private void fillLetturaRipartitoreCalore(Session session) {
 		int idMeter = 3; // ogni Meter Ripartitore Calore ha id = 3
 
 		List<Edificio> ediList = session.createQuery("from Edificio").list();
@@ -117,9 +133,8 @@ public class DbManager {
 		Random unitaConsumo = new Random();
 
 		for (int i = 0; i < ediList.size(); i++) {
-			LetturaDispositivo lettDisp = generateLettura(session,
-					idMeter, ediList.get(i));
-
+			LetturaDispositivo lettDisp = generateLettura(session, idMeter,
+					ediList.get(i));
 
 			// INSERT Meter Ripartitore Calore
 			MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
@@ -130,24 +145,27 @@ public class DbManager {
 	}
 
 	/**
-	 * Genera una entry in Lettura se viene creata una entry in uno dei meter.
+	 * Genera una entry in LetturaDispositivo con data casuale.
+	 * 
 	 * @param session
 	 * @param idDispositivo
 	 * @param edificio
 	 * @return
 	 * 
 	 */
-	private static LetturaDispositivo generateLettura(Session session,
+	private LetturaDispositivo generateLettura(Session session,
 			int idDispositivo, Edificio edificio) {
 
 		// generazione Random Data
 		Random generator = new Random();
-		int dd = generator.nextInt(30) + 1;
-		int mm = generator.nextInt(12);
-		int hh = generator.nextInt(24);
-		int mmin = generator.nextInt(60);
-		int ss = generator.nextInt(60);
-		Date date = new Date(114, mm, dd, hh, mmin, ss);
+		int day = generator.nextInt(30) + 1;
+		int month = generator.nextInt(12);
+		int hour = generator.nextInt(24);
+		int minute = generator.nextInt(60);
+		int second = generator.nextInt(60);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2014, month, day, hour, minute, second);
+		Date date = cal.getTime();
 
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
@@ -160,7 +178,17 @@ public class DbManager {
 		return lettDisp;
 	}
 
-	private static LetturaDispositivo generateLettura(Session session, int idDispositivo, Edificio edificio, Date date){
+	/**
+	 * Genera una entry in LetturaDispositivo
+	 * 
+	 * @param session
+	 * @param idDispositivo
+	 * @param edificio
+	 * @param date
+	 * @return
+	 */
+	private LetturaDispositivo generateLettura(Session session,
+			int idDispositivo, Edificio edificio, Date date) {
 
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
@@ -175,9 +203,10 @@ public class DbManager {
 
 	/**
 	 * Elimina tutte le entry nelle tabelle
+	 * 
 	 * @param session
 	 */
-	private static void flushTables(Session session) {
+	private void flushTables(Session session) {
 		Query q = null;
 
 		q = session.createQuery("delete from MeterRipartitoreCalore");
@@ -194,11 +223,13 @@ public class DbManager {
 	}
 
 	/**
-	 * Genera 20 edifici random
+	 * genera un numero "range" di edifici casuali
+	 * 
 	 * @param session
+	 * @param range
 	 */
-	private static void fillEdificio(Session session) {
-		int RANGE_EDIFICI = 20;
+	private void fillEdificio(Session session, int range) {
+		int RANGE_EDIFICI = range;
 		List<Edificio> ediList = new ArrayList<Edificio>(RANGE_EDIFICI);
 		List<String> meters = Arrays.asList("Meter Acqua", "Meter Elettrico",
 				"Meter Gas", "Meter Ripartitore Calore", "Meter Sonde",
@@ -238,18 +269,21 @@ public class DbManager {
 	}
 
 	/**
-	 * Genera 20 compartimenti random
+	 * Genera un numero "RANGE" di compartimenti random
+	 * 
 	 * @param session
+	 * @param range
 	 */
-	private static void fillCompartimento(Session session) {
+	private void fillCompartimento(Session session, int range) {
 		// generatore di numeri causuali in RANGE
+		int RANGE_COMPARTIMENTI = range;
 		int RANGE = 100;
 		final List<Integer> sack = new ArrayList<>(RANGE);
 		for (int i = 0; i < RANGE; i++)
 			sack.add(i);
 		Collections.shuffle(sack);
 		// riempimento compartimenti
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < RANGE_COMPARTIMENTI; i++) {
 			Compartimento comp = new Compartimento();
 			comp.setIdCompartimento(sack.get(i));
 			comp.setNomeCompartimento("Comp Number " + sack.get(i));
