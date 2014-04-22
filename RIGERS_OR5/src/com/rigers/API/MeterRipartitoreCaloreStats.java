@@ -159,7 +159,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore monthAverage(int year, int month) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
 			fillLists(element);
@@ -179,7 +179,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore monthMax(int year, int month) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
 			fillLists(element);
@@ -199,7 +199,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore monthMin(int year, int month) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
 			fillLists(element);
@@ -220,7 +220,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore weekMin(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
 			fillLists(element);
@@ -241,7 +241,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore weekMax(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
 			fillLists(element);
@@ -262,7 +262,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore weekAverage(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
 			fillLists(element);
@@ -283,7 +283,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore dayAverage(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
 			fillLists(element);
@@ -304,7 +304,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore dayMax(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
 			fillLists(element);
@@ -325,7 +325,7 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 */
 	public MeterRipartitoreCalore dayMin(int year, int month, int date) {
 		meterRipCal = new MeterRipartitoreCalore();
-		checkLists();
+		clearLists();
 		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
 			fillLists(element);
