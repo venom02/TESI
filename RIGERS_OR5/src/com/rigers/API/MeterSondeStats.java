@@ -24,6 +24,7 @@ public class MeterSondeStats extends Tools {
 	private ArrayList<Integer> tempDayList = new ArrayList<Integer>();
 	private ArrayList<Integer> solarimetroList = new ArrayList<Integer>();
 	private MeterSonde meterSonde;
+
 	/**
 	 * Costruttore. ottiene parametro edificio
 	 * 
@@ -35,6 +36,7 @@ public class MeterSondeStats extends Tools {
 
 	/**
 	 * query di ricerca letture comprese nelle date assegnate come parametri
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @return
@@ -60,6 +62,79 @@ public class MeterSondeStats extends Tools {
 	}
 
 	/**
+	 * Metodo di riempimento liste
+	 * 
+	 * @param element
+	 */
+	private void fillLists(MeterSonde element) {
+		luminositaList.add(element.getLuminosita());
+		sismografoList.add(element.getSismografo());
+		tempEstList.add(element.getTempEsterna());
+		tempIntList.add(element.getTempLocali());
+		tempDayList.add(element.getTempGiorno());
+		solarimetroList.add(element.getSolarimetro());
+	}
+
+	private void clearLists() {
+		luminositaList.clear();
+		sismografoList.clear();
+		tempEstList.clear();
+		tempIntList.clear();
+		tempDayList.clear();
+		solarimetroList.clear();
+	}
+
+	private void checkLists() {
+		if (luminositaList.isEmpty()) {
+			luminositaList.add(0);
+		}
+		if (sismografoList.isEmpty()) {
+			sismografoList.add(0);
+		}
+		if (solarimetroList.isEmpty()) {
+			solarimetroList.add(0);
+		}
+		if (tempEstList.isEmpty()) {
+			tempEstList.add(0);
+		}
+		if (tempIntList.isEmpty()) {
+			tempIntList.add(0);
+		}
+		if (tempDayList.isEmpty()) {
+			tempDayList.add(0);
+		}
+	}
+
+	private void fillMeterAvg() {
+		meterSonde.setLuminosita(average(luminositaList));
+		meterSonde.setSismografo(average(sismografoList));
+		meterSonde.setSolarimetro(average(solarimetroList));
+		meterSonde.setTempEsterna(average(tempEstList));
+		meterSonde.setTempGiorno(average(tempDayList));
+		meterSonde.setTempLocali(average(tempIntList));
+	}
+
+	private void fillMeterMax() {
+		checkLists();
+		meterSonde.setLuminosita(Collections.max(luminositaList));
+		meterSonde.setSismografo(Collections.max(sismografoList));
+		meterSonde.setSolarimetro(Collections.max(solarimetroList));
+		meterSonde.setTempEsterna(Collections.max(tempEstList));
+		meterSonde.setTempGiorno(Collections.max(tempDayList));
+		meterSonde.setTempLocali(Collections.max(tempIntList));
+	}
+
+	private void fillMeterMin() {
+		checkLists();
+		meterSonde.setLuminosita(Collections.min(luminositaList));
+		meterSonde.setSismografo(Collections.min(sismografoList));
+		meterSonde.setSolarimetro(Collections.min(solarimetroList));
+		meterSonde.setTempEsterna(Collections.min(tempEstList));
+		meterSonde.setTempGiorno(Collections.min(tempDayList));
+		meterSonde.setTempLocali(Collections.min(tempIntList));
+	}
+
+	/**
 	 * genera una lista di oggetti MeterSonde appartenenti solo al mese dato e
 	 * all'edificio prescelto
 	 * 
@@ -78,94 +153,6 @@ public class MeterSondeStats extends Tools {
 		List<MeterSonde> list = queryList(dateFrom, dateTo);
 
 		return list;
-	}
-
-	/**
-	 * Media Mensile. ritorna oggetto meterSonde contenenti i valori di media
-	 * mensile
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterSonde monthAverage(int year, int month) {
-		meterSonde = new MeterSonde();
-
-		for (MeterSonde element : getMonthList(year, month)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(average(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde
-					.setSismografo(average(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-
-		return meterSonde;
-	}
-
-	/**
-	 * Massimo mensile. ritorna oggetto MeterSonde contenente tutti i valori
-	 * massimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterSonde monthMax(int year, int month) {
-		meterSonde = new MeterSonde();
-
-		for (MeterSonde element : getMonthList(year, month)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.max(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.max(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-		return meterSonde;
-	}
-
-	/**
-	 * Minimo mensile. ritorna oggetto MeterSonde contenente tutti i valori
-	 * minimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterSonde monthMin(int year, int month) {
-		meterSonde = new MeterSonde();
-
-		for (MeterSonde element : getMonthList(year, month)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.min(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.min(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-
-		return meterSonde;
 	}
 
 	/**
@@ -192,99 +179,6 @@ public class MeterSondeStats extends Tools {
 	}
 
 	/**
-	 * Minimo Settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterSonde weekMin(int year, int month, int date) {
-		meterSonde = new MeterSonde();
-
-		for (MeterSonde element : getWeekList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.min(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.min(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-
-		return meterSonde;
-	}
-
-	/**
-	 * Massimo settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterSonde weekMax(int year, int month, int date) {
-		meterSonde = new MeterSonde();
-
-
-		for (MeterSonde element : getWeekList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.max(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.max(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-
-		return meterSonde;
-	}
-
-	/**
-	 * Media settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterSonde weekAverage(int year, int month, int date) {
-		meterSonde = new MeterSonde();
-
-		for (MeterSonde element : getWeekList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
-		}
-
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(average(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde
-					.setSismografo(average(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
-
-		return meterSonde;
-	}
-
-	/**
 	 * Ritorna lista oggetti MeterSonde appartenenti al giorno dato
 	 * 
 	 * @param year
@@ -304,6 +198,129 @@ public class MeterSondeStats extends Tools {
 	}
 
 	/**
+	 * Media Mensile. ritorna oggetto meterSonde contenenti i valori di media
+	 * mensile
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterSonde monthAverage(int year, int month) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterAvg();
+
+		return meterSonde;
+	}
+
+	/**
+	 * Massimo mensile. ritorna oggetto MeterSonde contenente tutti i valori
+	 * massimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterSonde monthMax(int year, int month) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMax();
+
+		return meterSonde;
+	}
+
+	/**
+	 * Minimo mensile. ritorna oggetto MeterSonde contenente tutti i valori
+	 * minimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterSonde monthMin(int year, int month) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterSonde;
+	}
+
+	/**
+	 * Minimo Settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterSonde weekMin(int year, int month, int date) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterSonde;
+	}
+
+	/**
+	 * Massimo settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterSonde weekMax(int year, int month, int date) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterSonde;
+	}
+
+	/**
+	 * Media settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterSonde weekAverage(int year, int month, int date) {
+		meterSonde = new MeterSonde();
+		clearLists();
+
+		for (MeterSonde element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterAvg();
+
+		return meterSonde;
+	}
+
+	/**
 	 * media giornaliera
 	 * 
 	 * @param year
@@ -313,22 +330,13 @@ public class MeterSondeStats extends Tools {
 	 */
 	public MeterSonde dayAverage(int year, int month, int date) {
 		meterSonde = new MeterSonde();
+		clearLists();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
+			fillLists(element);
 		}
 
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(average(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde
-					.setSismografo(average(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
+		fillMeterAvg();
 
 		return meterSonde;
 	}
@@ -343,23 +351,13 @@ public class MeterSondeStats extends Tools {
 	 */
 	public MeterSonde dayMax(int year, int month, int date) {
 		meterSonde = new MeterSonde();
+		clearLists();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
+			fillLists(element);
 		}
 
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.max(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.max(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
+		fillMeterMax();
 
 		return meterSonde;
 	}
@@ -373,24 +371,14 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	public MeterSonde dayMin(int year, int month, int date) {
-    	meterSonde = new MeterSonde();
+		meterSonde = new MeterSonde();
+		clearLists();
 
 		for (MeterSonde element : getDayList(year, month, date)) {
-			luminositaList.add(element.getLuminosita());
-			sismografoList.add(element.getSismografo());
+			fillLists(element);
 		}
 
-		if (!luminositaList.isEmpty()) {
-			meterSonde.setLuminosita(Collections
-					.min(luminositaList));
-		} else
-			meterSonde.setLuminosita(0);
-		if (!sismografoList.isEmpty()) {
-			meterSonde.setSismografo(Collections
-					.min(sismografoList));
-		} else {
-			meterSonde.setSismografo(0);
-		}
+		fillMeterMin();
 
 		return meterSonde;
 	}
@@ -413,9 +401,14 @@ public class MeterSondeStats extends Tools {
 		for (int i = 0; i < list.size(); i++) {
 			String LUM = myFormat.format(list.get(i).getLuminosita());
 			String SIS = myFormat.format(list.get(i).getSismografo());
+			String SOL = myFormat.format(list.get(i).getSolarimetro());
+			String TIN = myFormat.format(list.get(i).getTempLocali());
+			String TEX = myFormat.format(list.get(i).getTempEsterna());
+			String TDY = myFormat.format(list.get(i).getTempGiorno());
 
-			dayCRVStrings[i] = "Luminosita: " + LUM
-					+ "\t Sismografo: " + SIS;
+			dayCRVStrings[i] = "Luminosita: " + LUM + "\t Sismografo: " + SIS
+					+ "\t Solarimetro: " + SOL + "\t Temp Locali: " + TIN
+					+ "\t Temp Esterna: " + TEX + "\t Temp Giorno: " + TDY;
 		}
 
 		return dayCRVStrings;

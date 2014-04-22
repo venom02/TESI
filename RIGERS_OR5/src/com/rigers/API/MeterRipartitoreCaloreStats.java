@@ -17,6 +17,8 @@ import com.rigers.persistence.HibernateUtil;
 public class MeterRipartitoreCaloreStats extends Tools {
 
 	private Edificio edificio;
+	private ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
+	private MeterRipartitoreCalore meterRipCal;
 
 	/**
 	 * Costruttore. ottiene parametro edificio
@@ -28,7 +30,9 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	}
 
 	/**
-	 * genera la lista di oggetti conenuti nelle due date indicate come parametri
+	 * genera la lista di oggetti conenuti nelle due date indicate come
+	 * parametri
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @return
@@ -51,11 +55,39 @@ public class MeterRipartitoreCaloreStats extends Tools {
 		List<MeterRipartitoreCalore> list = query.list();
 		session.getTransaction().commit();
 		return list;
-	}	
+	}
+
+	private void fillLists(MeterRipartitoreCalore element) {
+		unitaConsumoList.add(element.getUnitaConsumo());
+	}
+
+	private void clearLists() {
+		unitaConsumoList.clear();
+	}
+
+	private void checkLists() {
+		if (unitaConsumoList.isEmpty()) {
+			unitaConsumoList.add(0);
+		}
+	}
+
+	private void fillMeterAvg() {
+		meterRipCal.setUnitaConsumo(average(unitaConsumoList));
+	}
+
+	private void fillMeterMax() {
+		checkLists();
+		meterRipCal.setUnitaConsumo(Collections.max(unitaConsumoList));
+	}
+
+	private void fillMeterMin() {
+		checkLists();
+		meterRipCal.setUnitaConsumo(Collections.min(unitaConsumoList));
+	}
 	
 	/**
-	 * genera una lista di oggetti MeterRipartitoreCalore appartenenti solo al mese dato e
-	 * all'edificio prescelto
+	 * genera una lista di oggetti MeterRipartitoreCalore appartenenti solo al
+	 * mese dato e all'edificio prescelto
 	 * 
 	 * @param month
 	 * @return
@@ -75,86 +107,36 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	}
 
 	/**
-	 * Media Mensile. ritorna oggetto MeterRipartitoreCalore contenenti i valori di media
-	 * mensile
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterRipartitoreCalore monthAverage(int year, int month) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
-		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
-		}
-
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(average(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
-
-		return meterRipCal;
-	}
-
-	/**
-	 * Massimo mensile. ritorna oggetto MeterRipartitoreCalore contenente tutti i valori
-	 * massimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterRipartitoreCalore monthMax(int year, int month) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
-		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
-		}
-
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.max(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
-
-		return meterRipCal;
-	}
-
-	/**
-	 * Minimo mensile. ritorna oggetto MeterRipartitoreCalore contenente tutti i valori
-	 * minimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterRipartitoreCalore monthMin(int year, int month) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
-		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
-		}
-
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.min(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
-		return meterRipCal;
-	}
-
-	/**
-	 * Ritorna lista oggetti MeterRipartitoreCalore solo della settimana appartenente al
-	 * giorno dato
+	 * Ritorna lista oggetti MeterRipartitoreCalore appartenenti al giorno dato
 	 * 
 	 * @param year
 	 * @param month
 	 * @param date
 	 * @return
 	 */
-	private List<MeterRipartitoreCalore> getWeekList(int year, int month, int date) {
+	private List<MeterRipartitoreCalore> getDayList(int year, int month,
+			int date) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(year, month, date, 0, 0, 0);
+		Date dateFrom = cal.getTime();
+		cal.add(Calendar.DATE, 1);
+		Date dateTo = cal.getTime();
+
+		List<MeterRipartitoreCalore> list = queryList(dateFrom, dateTo);
+		return list;
+	}
+
+	/**
+	 * Ritorna lista oggetti MeterRipartitoreCalore solo della settimana
+	 * appartenente al giorno dato
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	private List<MeterRipartitoreCalore> getWeekList(int year, int month,
+			int date) {
 		// Get calendar set to given date and time
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, date);
@@ -169,6 +151,66 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	}
 
 	/**
+	 * Media Mensile. ritorna oggetto MeterRipartitoreCalore contenenti i valori
+	 * di media mensile
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterRipartitoreCalore monthAverage(int year, int month) {
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
+		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterAvg();
+		
+		return meterRipCal;
+	}
+
+	/**
+	 * Massimo mensile. ritorna oggetto MeterRipartitoreCalore contenente tutti
+	 * i valori massimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterRipartitoreCalore monthMax(int year, int month) {
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
+		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMax();
+		
+		return meterRipCal;
+	}
+
+	/**
+	 * Minimo mensile. ritorna oggetto MeterRipartitoreCalore contenente tutti i
+	 * valori minimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterRipartitoreCalore monthMin(int year, int month) {
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
+		for (MeterRipartitoreCalore element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+		
+		return meterRipCal;
+	}
+
+	/**
 	 * Minimo Settimanale
 	 * 
 	 * @param year
@@ -177,18 +219,15 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore weekMin(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.min(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterMin();
+		
 		return meterRipCal;
 	}
 
@@ -201,18 +240,15 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore weekMax(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.max(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterMax();
+		
 		return meterRipCal;
 	}
 
@@ -225,40 +261,17 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore weekAverage(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getWeekList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(average(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterAvg();
+		
 		return meterRipCal;
 	}
-
-	/**
-	 * Ritorna lista oggetti MeterRipartitoreCalore appartenenti al giorno dato
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	private List<MeterRipartitoreCalore> getDayList(int year, int month, int date) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month, date, 0, 0, 0);
-		Date dateFrom = cal.getTime();
-		cal.add(Calendar.DATE, 1);
-		Date dateTo = cal.getTime();
-
-		List<MeterRipartitoreCalore> list = queryList(dateFrom, dateTo);
-		return list;
-	}
-
 
 	/**
 	 * media giornaliera
@@ -269,18 +282,15 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore dayAverage(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(average(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterAvg();
+		
 		return meterRipCal;
 	}
 
@@ -293,18 +303,15 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore dayMax(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.max(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterMax();
+		
 		return meterRipCal;
 	}
 
@@ -317,18 +324,15 @@ public class MeterRipartitoreCaloreStats extends Tools {
 	 * @return
 	 */
 	public MeterRipartitoreCalore dayMin(int year, int month, int date) {
-		MeterRipartitoreCalore meterRipCal = new MeterRipartitoreCalore();
-
-		ArrayList<Integer> unitaConsumoList = new ArrayList<Integer>();
-
+		meterRipCal = new MeterRipartitoreCalore();
+		checkLists();
+		
 		for (MeterRipartitoreCalore element : getDayList(year, month, date)) {
-			unitaConsumoList.add(element.getUnitaConsumo());
+			fillLists(element);
 		}
 
-		if (!unitaConsumoList.isEmpty()) {
-			meterRipCal.setUnitaConsumo(Collections.min(unitaConsumoList));
-		} else
-			meterRipCal.setUnitaConsumo(0);
+		fillMeterMin();
+		
 		return meterRipCal;
 	}
 
@@ -346,10 +350,10 @@ public class MeterRipartitoreCaloreStats extends Tools {
 
 		NumberFormat myFormat = NumberFormat.getInstance();
 		myFormat.setMinimumIntegerDigits(3);
-		
+
 		for (int i = 0; i < list.size(); i++) {
 			String UC = list.get(i).getUnitaConsumo().toString();
-			dayCRVStrings[i] = "Unità Consumo: " + UC; 
+			dayCRVStrings[i] = "Unità Consumo: " + UC;
 		}
 
 		return dayCRVStrings;

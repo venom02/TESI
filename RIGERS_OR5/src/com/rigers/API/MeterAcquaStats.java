@@ -12,11 +12,15 @@ import org.hibernate.Session;
 import com.ibm.icu.text.NumberFormat;
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterAcqua;
+import com.rigers.db.MeterAcqua;
 import com.rigers.persistence.HibernateUtil;
 
 public class MeterAcquaStats extends Tools {
 
 	private Edificio edificio;
+	private MeterAcqua meterAcqua;
+	private ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
+	private ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
 
 	/**
 	 * Costruttore. ottiene parametro edificio
@@ -29,6 +33,7 @@ public class MeterAcquaStats extends Tools {
 
 	/**
 	 * query di ricerca letture comprese nelle date assegnate come parametri
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @return
@@ -53,6 +58,48 @@ public class MeterAcquaStats extends Tools {
 		return list;
 	}
 
+	
+	/**
+	 * Metodo di riempimento liste
+	 * 
+	 * @param element
+	 */
+	private void fillLists(MeterAcqua element) {
+		currentReadoutValueList.add(element.getCurrentReadoutValue());
+		periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+	}
+
+	private void clearLists() {
+		currentReadoutValueList.clear();
+		periodicReadoutValueList.clear();
+	}
+
+	private void checkLists() {
+		if (currentReadoutValueList.isEmpty()) {
+			currentReadoutValueList.add(0);
+		}
+		if (periodicReadoutValueList.isEmpty()) {
+			periodicReadoutValueList.add(0);
+		}
+	}
+
+	private void fillMeterAvg() {
+		meterAcqua.setCurrentReadoutValue(average(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(average(periodicReadoutValueList));
+	}
+
+	private void fillMeterMax() {
+		checkLists();
+		meterAcqua.setCurrentReadoutValue(Collections.max(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections.max(periodicReadoutValueList));
+	}
+
+	private void fillMeterMin() {
+		checkLists();
+		meterAcqua.setCurrentReadoutValue(Collections.min(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections.min(periodicReadoutValueList));
+	}
+	
 	/**
 	 * genera una lista di oggetti MeterAcqua appartenenti solo al mese dato e
 	 * all'edificio prescelto
@@ -72,103 +119,6 @@ public class MeterAcquaStats extends Tools {
 		List<MeterAcqua> list = queryList(dateFrom, dateTo);
 
 		return list;
-	}
-
-	/**
-	 * Media Mensile. ritorna oggetto meterAcqua contenenti i valori di media
-	 * mensile
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterAcqua monthAverage(int year, int month) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getMonthList(year, month)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(average(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua
-					.setPeriodicReadoutValue(average(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-
-		return meterAcqua;
-	}
-
-	/**
-	 * Massimo mensile. ritorna oggetto MeterAcqua contenente tutti i valori
-	 * massimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterAcqua monthMax(int year, int month) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getMonthList(year, month)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.max(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.max(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-		return meterAcqua;
-	}
-
-	/**
-	 * Minimo mensile. ritorna oggetto MeterAcqua contenente tutti i valori
-	 * minimi del mese
-	 * 
-	 * @param month
-	 * @return
-	 */
-	public MeterAcqua monthMin(int year, int month) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getMonthList(year, month)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.min(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.min(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-
-		return meterAcqua;
 	}
 
 	/**
@@ -195,107 +145,6 @@ public class MeterAcquaStats extends Tools {
 	}
 
 	/**
-	 * Minimo Settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterAcqua weekMin(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getWeekList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.min(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.min(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-
-		return meterAcqua;
-	}
-
-	/**
-	 * Massimo settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterAcqua weekMax(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getWeekList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.max(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.max(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-
-		return meterAcqua;
-	}
-
-	/**
-	 * Media settimanale
-	 * 
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @return
-	 */
-	public MeterAcqua weekAverage(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
-
-		for (MeterAcqua element : getWeekList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
-		}
-
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(average(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua
-					.setPeriodicReadoutValue(average(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
-
-		return meterAcqua;
-	}
-
-	/**
 	 * Ritorna lista oggetti MeterAcqua appartenenti al giorno dato
 	 * 
 	 * @param year
@@ -315,6 +164,129 @@ public class MeterAcquaStats extends Tools {
 	}
 
 	/**
+	 * Media Mensile. ritorna oggetto meterAcqua contenenti i valori di media
+	 * mensile
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterAcqua monthAverage(int year, int month) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterAvg();
+
+		return meterAcqua;
+	}
+
+	/**
+	 * Massimo mensile. ritorna oggetto MeterAcqua contenente tutti i valori
+	 * massimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterAcqua monthMax(int year, int month) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMax();
+
+		return meterAcqua;
+	}
+
+	/**
+	 * Minimo mensile. ritorna oggetto MeterAcqua contenente tutti i valori
+	 * minimi del mese
+	 * 
+	 * @param month
+	 * @return
+	 */
+	public MeterAcqua monthMin(int year, int month) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getMonthList(year, month)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterAcqua;
+	}
+
+	/**
+	 * Minimo Settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterAcqua weekMin(int year, int month, int date) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterAcqua;
+	}
+
+	/**
+	 * Massimo settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterAcqua weekMax(int year, int month, int date) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterMin();
+
+		return meterAcqua;
+	}
+
+	/**
+	 * Media settimanale
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
+	public MeterAcqua weekAverage(int year, int month, int date) {
+		meterAcqua = new MeterAcqua();
+		clearLists();
+
+		for (MeterAcqua element : getWeekList(year, month, date)) {
+			fillLists(element);
+		}
+
+		fillMeterAvg();
+
+		return meterAcqua;
+	}
+
+	/**
 	 * media giornaliera
 	 * 
 	 * @param year
@@ -323,26 +295,14 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	public MeterAcqua dayAverage(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		meterAcqua = new MeterAcqua();
+		clearLists();
 
 		for (MeterAcqua element : getDayList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+			fillLists(element);
 		}
 
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(average(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua
-					.setPeriodicReadoutValue(average(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
+		fillMeterAvg();
 
 		return meterAcqua;
 	}
@@ -356,27 +316,14 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	public MeterAcqua dayMax(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		meterAcqua = new MeterAcqua();
+		clearLists();
 
 		for (MeterAcqua element : getDayList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+			fillLists(element);
 		}
 
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.max(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.max(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
+		fillMeterMax();
 
 		return meterAcqua;
 	}
@@ -390,27 +337,14 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	public MeterAcqua dayMin(int year, int month, int date) {
-		MeterAcqua meterAcqua = new MeterAcqua();
-
-		ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
-		ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+		meterAcqua = new MeterAcqua();
+		clearLists();
 
 		for (MeterAcqua element : getDayList(year, month, date)) {
-			currentReadoutValueList.add(element.getCurrentReadoutValue());
-			periodicReadoutValueList.add(element.getPeriodicReadoutValue());
+			fillLists(element);
 		}
 
-		if (!currentReadoutValueList.isEmpty()) {
-			meterAcqua.setCurrentReadoutValue(Collections
-					.min(currentReadoutValueList));
-		} else
-			meterAcqua.setCurrentReadoutValue(0);
-		if (!periodicReadoutValueList.isEmpty()) {
-			meterAcqua.setPeriodicReadoutValue(Collections
-					.min(periodicReadoutValueList));
-		} else {
-			meterAcqua.setPeriodicReadoutValue(0);
-		}
+		fillMeterMin();
 
 		return meterAcqua;
 	}

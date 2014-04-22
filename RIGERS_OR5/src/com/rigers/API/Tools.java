@@ -3,6 +3,7 @@
  */
 package com.rigers.API;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -43,4 +44,15 @@ public class Tools {
 		}
 		return sum;
 	}
+
+	/**
+	 * controlla se la lista è vuota ed inserisce un valore 0
+	 * @param list
+	 */
+	protected void chk(ArrayList list) {
+		if (list.isEmpty()) {
+			list.add(0);
+		}
+	}
+
 }
