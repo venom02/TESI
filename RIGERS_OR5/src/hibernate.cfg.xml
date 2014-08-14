@@ -6,16 +6,15 @@
 		
 		 <!-- Database connection settings -->
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">philips02</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/rigers</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/RIGERS</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
 		 <!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
 		<property name="current_session_context_class">thread</property>
-<!-- 		<property name="hibernate.hbm2ddl.auto">create</property> -->
-
+<!--   		<property name="hibernate.hbm2ddl.auto">create</property>
+ --> 
 		<mapping resource="com/rigers/db/AllarmiStatoImpianto.hbm.xml" />
 		<mapping resource="com/rigers/db/Compartimento.hbm.xml" />
 		<mapping resource="com/rigers/db/Dispositivo.hbm.xml" />
@@ -30,7 +29,7 @@
 		<mapping resource="com/rigers/db/MeterRipartitoreCalore.hbm.xml" />
 		<mapping resource="com/rigers/db/MeterSonde.hbm.xml" />
 		<mapping resource="com/rigers/db/MeterTermie.hbm.xml" />
-		<mapping resource="com/rigers/db/ParametriElettrici.hbm.xml" />
+ 		<mapping resource="com/rigers/db/ParametriElettrici.hbm.xml" />
 		<mapping resource="com/rigers/db/Telecontrollo.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

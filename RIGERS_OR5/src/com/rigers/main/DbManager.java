@@ -10,6 +10,7 @@ import java.util.Random;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.ibm.icu.util.Calendar;
 import com.rigers.db.*;
@@ -22,28 +23,43 @@ public class DbManager {
 	public DbManager(Edificio edificio) {
 		this.edificio = edificio;
 	}
+	
+	public DbManager(){
+		
+	}
 
 	/**
 	 * Riempie con dati casuali il database rigers
 	 */
-	public static void fillDb(Edificio edificio) {
+	public static void fillDb() {
 		// Apertura sessione
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-
-		// flushTables(session);
-		//
-		// fillCompartimento(session, 20);
-		//
-		// fillEdificio(session, 20);
-		//
-		// fillLetturaRipartitoreCalore(session);
-
-		// fillLetturaAcqua(session);
-
-		// fillLetturaSonde(session);
-
-		session.getTransaction().commit();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = null;  
+		try{
+			tx = session.beginTransaction();
+			
+			flushTables(session);
+		
+			fillCompartimento(session, 20);
+		
+			fillEdificio(session, 20);
+		
+			// fillLetturaRipartitoreCalore(session);
+	
+			// fillLetturaAcqua(session);
+	
+			// fillLetturaSonde(session);
+			tx.commit();
+		}
+		 catch (Exception e) {
+		     if (tx!=null) tx.rollback();
+		     throw e;
+		 }
+		finally{
+			session.close();
+		}
+		
+		
 	}
 
 	public void fillMonth(int month) {
@@ -166,14 +182,15 @@ public class DbManager {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2014, month, day, hour, minute, second);
 		Date date = cal.getTime();
-
+		java.sql.Date dateDB = new java.sql.Date(date.getTime());
+		System.out.println(dateDB);
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
 				edificio.getIdEdificio());
 		Dispositivo dispositivo = new Dispositivo(id, edificio);
 
 		// INSERT lettura dispositivo
-		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo, date);
+		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo, dateDB);
 		session.save(lettDisp);
 		return lettDisp;
 	}
@@ -206,7 +223,7 @@ public class DbManager {
 	 * 
 	 * @param session
 	 */
-	private void flushTables(Session session) {
+	private static void flushTables(Session session) {
 		Query q = null;
 
 		q = session.createQuery("delete from MeterRipartitoreCalore");
@@ -228,7 +245,7 @@ public class DbManager {
 	 * @param session
 	 * @param range
 	 */
-	private void fillEdificio(Session session, int range) {
+	private static void fillEdificio(Session session, int range) {
 		int RANGE_EDIFICI = range;
 		List<Edificio> ediList = new ArrayList<Edificio>(RANGE_EDIFICI);
 		List<String> meters = Arrays.asList("Meter Acqua", "Meter Elettrico",
@@ -274,7 +291,7 @@ public class DbManager {
 	 * @param session
 	 * @param range
 	 */
-	private void fillCompartimento(Session session, int range) {
+	private static void fillCompartimento(Session session, int range) {
 		// generatore di numeri causuali in RANGE
 		int RANGE_COMPARTIMENTI = range;
 		int RANGE = 100;
