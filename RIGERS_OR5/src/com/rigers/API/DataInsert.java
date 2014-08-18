@@ -1,4 +1,4 @@
-package com.rigers.main;
+package com.rigers.API;
 
 import java.util.List;
 

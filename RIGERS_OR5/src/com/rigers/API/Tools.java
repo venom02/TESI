@@ -54,5 +54,4 @@ public class Tools {
 			list.add(0);
 		}
 	}
-
 }

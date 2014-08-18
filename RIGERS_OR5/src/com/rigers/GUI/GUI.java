@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.rigers.main.DataInsert;
-import com.rigers.main.DataView;
+import com.rigers.API.DataInsert;
+import com.rigers.API.DataView;
 
 public class GUI {
 	protected Shell shlRigers;

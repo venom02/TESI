@@ -1,10 +1,11 @@
-package com.rigers.main;
+package com.rigers.API;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
@@ -12,9 +13,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.ibm.icu.util.Calendar;
-import com.rigers.db.*;
+import com.rigers.db.Compartimento;
+import com.rigers.db.Dispositivo;
+import com.rigers.db.DispositivoId;
+import com.rigers.db.Edificio;
+import com.rigers.db.LetturaDispositivo;
+import com.rigers.db.MeterAcqua;
+import com.rigers.db.MeterRipartitoreCalore;
+import com.rigers.db.MeterSonde;
 import com.rigers.persistence.HibernateUtil;
+import com.rigers.API.Tools;
 
 public class DbManager {
 
@@ -23,9 +31,9 @@ public class DbManager {
 	public DbManager(Edificio edificio) {
 		this.edificio = edificio;
 	}
-	
-	public DbManager(){
-		
+
+	public DbManager() {
+
 	}
 
 	/**
@@ -34,48 +42,49 @@ public class DbManager {
 	public static void fillDb() {
 		// Apertura sessione
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		Transaction tx = null;  
-		try{
+		Transaction tx = null;
+		try {
 			tx = session.beginTransaction();
-			
+
 			flushTables(session);
-		
+
 			fillCompartimento(session, 20);
-		
+
 			fillEdificio(session, 20);
-		
+
 			// fillLetturaRipartitoreCalore(session);
-	
+
 			// fillLetturaAcqua(session);
-	
+
 			// fillLetturaSonde(session);
 			tx.commit();
-		}
-		 catch (Exception e) {
-		     if (tx!=null) tx.rollback();
-		     throw e;
-		 }
-		finally{
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		} finally {
 			session.close();
 		}
-		
-		
+
 	}
 
 	public void fillMonth(int month) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Calendar cal = Calendar.getInstance();
-		cal.set(2014, month, 1, 0, 0, 0);
-		for (int i = 0; i < 30; i++) {
-			cal.set(Calendar.HOUR, 0);
-			cal.add(Calendar.DATE, 1);
-			for (int j = 0; j < 4; j++) {
-				cal.add(Calendar.HOUR, 6);
-				Date date = cal.getTime();
-				// fillLetturaAcqua(session, date);
-				fillLetturaSonde(session, date);
-			}
+
+		Date date = new GregorianCalendar(2014, month, 1).getTime();
+
+		// per ogni giorno del mese inserisce una lettura ogni 6 ore
+		for (int i = 0; i < 28; i++) {
+			date.setHours(0);
+			date.setDate(i);
+			fillLetturaAcqua(session, date);
+			fillLetturaSonde(session, date);
+			fillLetturaRipartitoreCalore(session, date);
+			date.setHours(12);
+			fillLetturaAcqua(session, date);
+			fillLetturaSonde(session, date);
+			fillLetturaRipartitoreCalore(session, date);
 		}
 		session.getTransaction().commit();
 	}
@@ -93,7 +102,8 @@ public class DbManager {
 		// Generatore Valori Casuali
 		Random generator = new Random();
 
-		LetturaDispositivo lettDisp = generateLettura(session, idMeter,	edificio);
+		LetturaDispositivo lettDisp = generateLettura(session, idMeter,
+				edificio, date);
 
 		// PK Meter Sonde
 
@@ -129,7 +139,7 @@ public class DbManager {
 		meterAcqua.setIdLettura(lettDisp.getIdLettura());
 		meterAcqua.setCurrentReadoutValue(generator.nextInt(50));
 		meterAcqua.setPeriodicReadoutValue(generator.nextInt(20));
-		meterAcqua.setPeriodicReadingDate(new Date());
+		meterAcqua.setPeriodicReadingDate(generateRandomDate());
 		session.save(meterAcqua);
 
 	}
@@ -140,7 +150,7 @@ public class DbManager {
 	 * 
 	 * @param session
 	 */
-	private void fillLetturaRipartitoreCalore(Session session) {
+	private void fillLetturaRipartitoreCalore(Session session, Date date) {
 		int idMeter = 3; // ogni Meter Ripartitore Calore ha id = 3
 
 		List<Edificio> ediList = session.createQuery("from Edificio").list();
@@ -150,7 +160,7 @@ public class DbManager {
 
 		for (int i = 0; i < ediList.size(); i++) {
 			LetturaDispositivo lettDisp = generateLettura(session, idMeter,
-					ediList.get(i));
+					ediList.get(i), date);
 
 			// INSERT Meter Ripartitore Calore
 			MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
@@ -173,24 +183,15 @@ public class DbManager {
 			int idDispositivo, Edificio edificio) {
 
 		// generazione Random Data
-		Random generator = new Random();
-		int day = generator.nextInt(30) + 1;
-		int month = generator.nextInt(12);
-		int hour = generator.nextInt(24);
-		int minute = generator.nextInt(60);
-		int second = generator.nextInt(60);
-		Calendar cal = Calendar.getInstance();
-		cal.set(2014, month, day, hour, minute, second);
-		Date date = cal.getTime();
-		java.sql.Date dateDB = new java.sql.Date(date.getTime());
-		System.out.println(dateDB);
+
 		// Creazione oggetto dispositivo senza richiamare una ulteriore query
 		DispositivoId id = new DispositivoId(idDispositivo,
 				edificio.getIdEdificio());
 		Dispositivo dispositivo = new Dispositivo(id, edificio);
 
 		// INSERT lettura dispositivo
-		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo, dateDB);
+		LetturaDispositivo lettDisp = new LetturaDispositivo(dispositivo,
+				generateRandomDate());
 		session.save(lettDisp);
 		return lettDisp;
 	}
@@ -308,4 +309,27 @@ public class DbManager {
 			session.save(comp);
 		}
 	}
+
+	/**
+	 * Genera una data casuale nell'anno 2014
+	 * 
+	 * @return
+	 */
+	public Date generateRandomDate() {
+		Date date;
+
+		Random generator = new Random();
+		int day = generator.nextInt(30) + 1;
+		int month = generator.nextInt(12);
+		int hours = generator.nextInt(24);
+		int minutes = generator.nextInt(60);
+		int seconds = generator.nextInt(60);
+
+		date = new GregorianCalendar(2014, month, day).getTime();
+		date.setMinutes(minutes);
+		date.setSeconds(seconds);
+		date.setHours(hours);
+
+		return date;
+	};
 }

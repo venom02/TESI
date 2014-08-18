@@ -12,8 +12,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.hibernate.Session;
 
+import com.rigers.API.DataView;
 import com.rigers.db.Edificio;
-import com.rigers.main.DataView;
 import com.rigers.persistence.HibernateUtil;
 
 public class ShowEdifWindow {
