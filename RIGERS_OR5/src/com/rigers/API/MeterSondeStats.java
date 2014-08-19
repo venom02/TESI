@@ -1,15 +1,16 @@
 package com.rigers.API;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.ibm.icu.text.NumberFormat;
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterSonde;
 import com.rigers.persistence.HibernateUtil;
@@ -52,8 +53,8 @@ public class MeterSondeStats extends Tools {
 				+ "AND l.dataLettura>= :dateFrom "
 				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
 		Query query = session.createQuery(queryStr);
-		query.setParameter("dateTo", dateTo);
-		query.setParameter("dateFrom", dateFrom);
+		query.setDate("dateTo", dateTo);
+		query.setDate("dateFrom", dateFrom);
 		query.setParameter("edificio", edificio.getIdEdificio());
 		List<MeterSonde> list = query.list();
 
@@ -142,7 +143,7 @@ public class MeterSondeStats extends Tools {
 	 * @return
 	 */
 	private List<MeterSonde> getMonthList(int year, int month) {
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = new GregorianCalendar(year, month, 1).getInstance();
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));

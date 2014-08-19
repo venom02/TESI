@@ -21,7 +21,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 
-import com.ibm.icu.util.Calendar;
 import com.rigers.API.DataView;
 import com.rigers.API.MeterAcquaStats;
 import com.rigers.API.MeterRipartitoreCaloreStats;

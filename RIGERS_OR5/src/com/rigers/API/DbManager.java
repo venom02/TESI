@@ -39,7 +39,7 @@ public class DbManager {
 	/**
 	 * Riempie con dati casuali il database rigers
 	 */
-	public static void fillDb() {
+	public void fillDb() {
 		// Apertura sessione
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction tx = null;
@@ -52,11 +52,6 @@ public class DbManager {
 
 			fillEdificio(session, 20);
 
-			// fillLetturaRipartitoreCalore(session);
-
-			// fillLetturaAcqua(session);
-
-			// fillLetturaSonde(session);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)
@@ -69,24 +64,33 @@ public class DbManager {
 	}
 
 	public void fillMonth(int month) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
+		// Apertura sessione
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
 
-		Date date = new GregorianCalendar(2014, month, 1).getTime();
+			Calendar cal = new GregorianCalendar(2014, month, 1);
+			// per ogni giorno del mese inserisce una lettura ogni 6 ore
+			while (cal.get(Calendar.DATE) < 30) {
+				fillLetturaAcqua(session, cal.getTime());
+				fillLetturaSonde(session, cal.getTime());
+				fillLetturaRipartitoreCalore(session, cal.getTime());
+				cal.add(Calendar.DATE, 1);
+				if (cal.get(Calendar.MONTH) == 1 && cal.get(Calendar.DATE)==29) {
+					break;
+				}
+			}
 
-		// per ogni giorno del mese inserisce una lettura ogni 6 ore
-		for (int i = 0; i < 28; i++) {
-			date.setHours(0);
-			date.setDate(i);
-			fillLetturaAcqua(session, date);
-			fillLetturaSonde(session, date);
-			fillLetturaRipartitoreCalore(session, date);
-			date.setHours(12);
-			fillLetturaAcqua(session, date);
-			fillLetturaSonde(session, date);
-			fillLetturaRipartitoreCalore(session, date);
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		} finally {
+			session.close();
 		}
-		session.getTransaction().commit();
+
 	}
 
 	/**
@@ -224,7 +228,7 @@ public class DbManager {
 	 * 
 	 * @param session
 	 */
-	private static void flushTables(Session session) {
+	private void flushTables(Session session) {
 		Query q = null;
 
 		q = session.createQuery("delete from MeterRipartitoreCalore");
@@ -246,7 +250,7 @@ public class DbManager {
 	 * @param session
 	 * @param range
 	 */
-	private static void fillEdificio(Session session, int range) {
+	private void fillEdificio(Session session, int range) {
 		int RANGE_EDIFICI = range;
 		List<Edificio> ediList = new ArrayList<Edificio>(RANGE_EDIFICI);
 		List<String> meters = Arrays.asList("Meter Acqua", "Meter Elettrico",
@@ -292,7 +296,7 @@ public class DbManager {
 	 * @param session
 	 * @param range
 	 */
-	private static void fillCompartimento(Session session, int range) {
+	private void fillCompartimento(Session session, int range) {
 		// generatore di numeri causuali in RANGE
 		int RANGE_COMPARTIMENTI = range;
 		int RANGE = 100;

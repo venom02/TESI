@@ -1,5 +1,6 @@
 package com.rigers.API;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.ibm.icu.text.NumberFormat;
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterTermie;
 import com.rigers.persistence.HibernateUtil;

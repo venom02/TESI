@@ -1,5 +1,6 @@
 package com.rigers.API;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.ibm.icu.text.NumberFormat;
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterRipartitoreCalore;
 import com.rigers.persistence.HibernateUtil;
@@ -48,8 +48,8 @@ public class MeterRipartitoreCaloreStats extends Tools {
 				+ "AND l.dataLettura>= :dateFrom "
 				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
 		Query query = session.createQuery(queryStr);
-		query.setParameter("dateTo", dateTo);
-		query.setParameter("dateFrom", dateFrom);
+		query.setDate("dateTo", dateTo);
+		query.setDate("dateFrom", dateFrom);
 		query.setParameter("edificio", edificio.getIdEdificio());
 
 		List<MeterRipartitoreCalore> list = query.list();
