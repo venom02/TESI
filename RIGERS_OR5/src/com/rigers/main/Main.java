@@ -24,7 +24,7 @@ import com.rigers.persistence.HibernateUtil;
 public class Main {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		AdminUI.main(null);
+//		AdminUI.main(null);
 		UserUI.main(null);
 //		fillMonth(0);
 //		fillMonth(1);

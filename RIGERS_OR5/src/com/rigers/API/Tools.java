@@ -36,13 +36,12 @@ public class Tools {
 	 */
 	protected int average(List<Integer> marks) {
 		Integer sum = 0;
-		System.out.println(marks.size());
 		if (!marks.isEmpty()) {
 			for (Integer mark : marks) {
-					if(mark==null){
-						mark=0;
-					}
-					sum += mark;
+				if (mark == null) {
+					mark = 0;
+				}
+				sum += mark;
 			}
 			return sum / marks.size();
 		}
@@ -50,7 +49,7 @@ public class Tools {
 	}
 
 	/**
-	 * controlla se la lista è vuota ed inserisce un valore 0
+	 * Controlla se la lista è vuota ed inserisce un valore 0
 	 * 
 	 * @param list
 	 */
@@ -60,6 +59,15 @@ public class Tools {
 		}
 	}
 
+	/**
+	 * Genera le date iniziali e finali della settimana a partire dai tre
+	 * parametri
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
 	protected List<Date> weekDates(int year, int month, int date) {
 		// // Get calendar set to given date and time
 		Calendar cal = Calendar.getInstance();
@@ -79,6 +87,12 @@ public class Tools {
 		return list;
 	}
 
+	/**
+	 * Genera le date iniziali e finali del mese a partire dai due parametri
+	 * @param year
+	 * @param month
+	 * @return
+	 */
 	protected List<Date> monthDates(int year, int month) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -94,6 +108,13 @@ public class Tools {
 		return list;
 	}
 
+	/**
+	 * Genera le date iniziali e finali a partire dai due parametri
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 */
 	protected List<Date> dayDates(int year, int month, int date) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);

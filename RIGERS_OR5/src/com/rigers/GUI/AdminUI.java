@@ -1,7 +1,9 @@
 package com.rigers.GUI;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -34,9 +36,9 @@ public class AdminUI {
 	protected Shell shlRigers;
 	private Text txtCompartimento;
 	private Text textIndirizzoEdificio;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
+	private Text textCRV;
+	private Text textPRV;
+	private Text unitaConsumoText;
 	private Spinner spinnerCompId;
 	private Label lblCompInsert;
 	private StackLayout compDevLayout;
@@ -73,6 +75,10 @@ public class AdminUI {
 	private String[] dispList = new String[] { "Meter Acqua",
 			"Meter Elettrico", "Meter Gas", "Meter Ripartitore Calore",
 			"Meter Sonde", "Meter Termie", "*" };
+	private DateTime dateTime2;
+	private Label ripCalOk;
+	private DateTime dateTimePRD;
+	private Label acquaOk;
 
 	/**
 	 * Launch the application.
@@ -256,8 +262,8 @@ public class AdminUI {
 		btnInsertEdificio.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println("comp Index:"
-						+ comboSelectComp.getSelectionIndex());
+//				System.out.println("comp Index:"
+//						+ comboSelectComp.getSelectionIndex());
 				if (DataInsert.insertEdificio(spinnerIdEdificio.getText(),
 						comboSelectComp.getSelectionIndex(),
 						textIndirizzoEdificio.getText())) {
@@ -509,7 +515,7 @@ public class AdminUI {
 		Label lblData = new Label(grpLettura, SWT.NONE);
 		lblData.setText("Data:");
 
-		DateTime dateTime_2 = new DateTime(grpLettura, SWT.BORDER);
+		dateTime2 = new DateTime(grpLettura, SWT.BORDER);
 		new Label(grpLettura, SWT.NONE);
 		new Label(grpLettura, SWT.NONE);
 		new Label(grpLettura, SWT.NONE);
@@ -554,11 +560,11 @@ public class AdminUI {
 		Label lblCurrentReadoutValue = new Label(grpMeterAcqua, SWT.NONE);
 		lblCurrentReadoutValue.setText("Current Readout Value");
 
-		text_1 = new Text(grpMeterAcqua, SWT.BORDER);
-		GridData gd_text_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false,
+		textCRV = new Text(grpMeterAcqua, SWT.BORDER);
+		GridData gd_textCRV = new GridData(SWT.LEFT, SWT.CENTER, false, false,
 				1, 1);
-		gd_text_1.widthHint = 100;
-		text_1.setLayoutData(gd_text_1);
+		gd_textCRV.widthHint = 100;
+		textCRV.setLayoutData(gd_textCRV);
 
 		Label lblDal_1 = new Label(grpMeterAcqua, SWT.NONE);
 		lblDal_1.setText("dal");
@@ -568,11 +574,11 @@ public class AdminUI {
 		Label lblPeriodicReadoutValue = new Label(grpMeterAcqua, SWT.NONE);
 		lblPeriodicReadoutValue.setText("Periodic Readout Value");
 
-		text_2 = new Text(grpMeterAcqua, SWT.BORDER);
-		GridData gd_text_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false,
+		textPRV = new Text(grpMeterAcqua, SWT.BORDER);
+		GridData gd_textPRV = new GridData(SWT.LEFT, SWT.CENTER, false, false,
 				1, 1);
-		gd_text_2.widthHint = 100;
-		text_2.setLayoutData(gd_text_2);
+		gd_textPRV.widthHint = 100;
+		textPRV.setLayoutData(gd_textPRV);
 
 		Label lblDal = new Label(grpMeterAcqua, SWT.NONE);
 		lblDal.setText("dal");
@@ -582,7 +588,7 @@ public class AdminUI {
 		Label lblPeriodicReadingDate = new Label(grpMeterAcqua, SWT.NONE);
 		lblPeriodicReadingDate.setText("Periodic Reading Date");
 
-		DateTime dateTime = new DateTime(grpMeterAcqua, SWT.BORDER);
+		dateTimePRD = new DateTime(grpMeterAcqua, SWT.BORDER);
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
@@ -590,17 +596,47 @@ public class AdminUI {
 		new Label(grpMeterAcqua, SWT.NONE);
 		new Label(grpMeterAcqua, SWT.NONE);
 
-		Label lblOk_1 = new Label(grpMeterAcqua, SWT.NONE);
-		lblOk_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
+		acquaOk = new Label(grpMeterAcqua, SWT.NONE);
+		acquaOk.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
 				1, 1));
-		lblOk_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
-		lblOk_1.setText("OK");
+		acquaOk.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
+		acquaOk.setText("OK");
 
-		Button btnInsert_2 = new Button(grpMeterAcqua, SWT.NONE);
-		btnInsert_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		Button insertAcqua = new Button(grpMeterAcqua, SWT.NONE);
+		insertAcqua.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				insertAcqua();
+			}
+		});
+		insertAcqua.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		btnInsert_2.setText("INSERT");
+		insertAcqua.setText("INSERT");
 
+	}
+
+	protected void insertAcqua() {
+		int indexEdificio = comboEdif2.getSelectionIndex();
+		Date date = new GregorianCalendar(dateTime2.getYear(), dateTime2.getMonth(), dateTime2.getDay()).getTime();
+		date.setSeconds(new GregorianCalendar().getInstance().get(Calendar.SECOND));
+		
+		int crvVal = Integer.parseInt(textCRV.getText());
+		int prvVal = Integer.parseInt(textPRV.getText());
+		Date prdVal = new GregorianCalendar(dateTimePRD.getYear(), dateTimePRD.getMonth(), dateTimePRD.getDay()).getTime();
+		
+		boolean check = DataInsert.insertMeterAcqua(indexEdificio, date, crvVal, prvVal, prdVal);
+		
+		if (check) {
+			acquaOk.setForeground(SWTResourceManager
+					.getColor(SWT.COLOR_DARK_GREEN));
+			acquaOk.setText("OK");
+			System.out.println("success!");
+		} else {
+			acquaOk.setForeground(SWTResourceManager
+					.getColor(SWT.COLOR_DARK_RED));
+			acquaOk.setText("NO");
+			System.out.println("fail!");
+		}	
 	}
 
 	private void meter_elettrico() {
@@ -620,27 +656,55 @@ public class AdminUI {
 		lblUnitConsumo.setText("Unita\u00A0 Consumo");
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 
-		text_3 = new Text(grpMeterRipartitoreCalore, SWT.BORDER);
-		GridData gd_text_3 = new GridData(SWT.FILL, SWT.CENTER, false, false,
+		unitaConsumoText = new Text(grpMeterRipartitoreCalore, SWT.BORDER);
+		GridData gd_unitaConsumoText = new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1);
-		gd_text_3.widthHint = 100;
-		text_3.setLayoutData(gd_text_3);
+		gd_unitaConsumoText.widthHint = 100;
+		unitaConsumoText.setLayoutData(gd_unitaConsumoText);
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 		new Label(grpMeterRipartitoreCalore, SWT.NONE);
 
-		Label lblOk_2 = new Label(grpMeterRipartitoreCalore, SWT.NONE);
-		lblOk_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
+		ripCalOk = new Label(grpMeterRipartitoreCalore, SWT.NONE);
+		ripCalOk.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false,
 				1, 1));
-		lblOk_2.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
-		lblOk_2.setText("OK");
+		ripCalOk.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
+		ripCalOk.setText("OK");
 
-		Button btnInsert_3 = new Button(grpMeterRipartitoreCalore, SWT.NONE);
-		btnInsert_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		Button insertRipCal = new Button(grpMeterRipartitoreCalore, SWT.NONE);
+		insertRipCal.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				insertRipCal();
+			}
+		});
+		insertRipCal.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		btnInsert_3.setText("INSERT");
+		insertRipCal.setText("INSERT");
+	}
+
+	protected void insertRipCal() {
+		int indexEdificio = comboEdif2.getSelectionIndex();
+		Date date = new GregorianCalendar(dateTime2.getYear(), dateTime2.getMonth(), dateTime2.getDay()).getTime();
+		date.setSeconds(new GregorianCalendar().getInstance().get(Calendar.SECOND));
+		
+		int unitaConsumo = Integer.parseInt(unitaConsumoText.getText());
+		
+		boolean check = DataInsert.insertMeterRipCal(indexEdificio, date, unitaConsumo);
+		
+		if (check) {
+			ripCalOk.setForeground(SWTResourceManager
+					.getColor(SWT.COLOR_DARK_GREEN));
+			ripCalOk.setText("OK");
+			System.out.println("success!");
+		} else {
+			ripCalOk.setForeground(SWTResourceManager
+					.getColor(SWT.COLOR_DARK_RED));
+			ripCalOk.setText("NO");
+			System.out.println("fail!");
+		}		
 	}
 
 	private void meter_gas() {
@@ -717,6 +781,11 @@ public class AdminUI {
 		lblOk_3.setText("OK");
 
 		Button btnInsert = new Button(grpMeterSonde, SWT.NONE);
+		btnInsert.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+			}
+		});
 		btnInsert.setText("INSERT");
 
 	}
