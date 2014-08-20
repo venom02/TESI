@@ -18,7 +18,7 @@ import com.rigers.API.DataView;
 import com.rigers.db.Compartimento;
 import com.rigers.persistence.HibernateUtil;
 
-public class ShowCompWindow {
+public class CompListWindow {
 	private static class ContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object inputElement) {
 			return new Object[0];
@@ -38,7 +38,7 @@ public class ShowCompWindow {
 	 */
 	public static void main(String[] args) {
 		try {
-			ShowCompWindow window = new ShowCompWindow();
+			CompListWindow window = new CompListWindow();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();

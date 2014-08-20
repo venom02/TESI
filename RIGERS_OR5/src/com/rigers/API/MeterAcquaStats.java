@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterAcqua;
@@ -21,6 +22,7 @@ public class MeterAcquaStats extends Tools {
 	private MeterAcqua meterAcqua;
 	private ArrayList<Integer> currentReadoutValueList = new ArrayList<Integer>();
 	private ArrayList<Integer> periodicReadoutValueList = new ArrayList<Integer>();
+	private List<MeterAcqua> list;
 
 	/**
 	 * Costruttore. ottiene parametro edificio
@@ -39,26 +41,35 @@ public class MeterAcquaStats extends Tools {
 	 * @return
 	 */
 	private List<MeterAcqua> queryList(Date dateFrom, Date dateTo) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
 
-		String queryStr = "SELECT m " + "FROM MeterAcqua as m "
-				+ "WHERE m.idLettura IN (select l.idLettura "
-				+ "from LetturaDispositivo as l "
-				+ "WHERE l.dataLettura< :dateTo "
-				+ "AND l.dataLettura>= :dateFrom "
-				+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
-		Query query = session.createQuery(queryStr);
-		query.setDate("dateTo", dateTo);
-		query.setDate("dateFrom", dateFrom);
-		query.setParameter("edificio", edificio.getIdEdificio());
-		List<MeterAcqua> list = query.list();
+			String queryStr = "SELECT m " + "FROM MeterAcqua as m "
+					+ "WHERE m.idLettura IN (select l.idLettura "
+					+ "from LetturaDispositivo as l "
+					+ "WHERE l.dataLettura< :dateTo "
+					+ "AND l.dataLettura>= :dateFrom "
+					+ "AND l.dispositivo.edificio.idEdificio= :edificio)";
+			Query query = session.createQuery(queryStr);
+			query.setDate("dateTo", dateTo);
+			query.setDate("dateFrom", dateFrom);
+			query.setParameter("edificio", edificio.getIdEdificio());
+			list = query.list();
 
-		session.getTransaction().commit();
-		return list;
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		} finally {
+			session.close();
+			return list;
+		}
+
 	}
 
-	
 	/**
 	 * Metodo di riempimento liste
 	 * 
@@ -90,16 +101,20 @@ public class MeterAcquaStats extends Tools {
 
 	private void fillMeterMax() {
 		checkLists();
-		meterAcqua.setCurrentReadoutValue(Collections.max(currentReadoutValueList));
-		meterAcqua.setPeriodicReadoutValue(Collections.max(periodicReadoutValueList));
+		meterAcqua.setCurrentReadoutValue(Collections
+				.max(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections
+				.max(periodicReadoutValueList));
 	}
 
 	private void fillMeterMin() {
 		checkLists();
-		meterAcqua.setCurrentReadoutValue(Collections.min(currentReadoutValueList));
-		meterAcqua.setPeriodicReadoutValue(Collections.min(periodicReadoutValueList));
+		meterAcqua.setCurrentReadoutValue(Collections
+				.min(currentReadoutValueList));
+		meterAcqua.setPeriodicReadoutValue(Collections
+				.min(periodicReadoutValueList));
 	}
-	
+
 	/**
 	 * genera una lista di oggetti MeterAcqua appartenenti solo al mese dato e
 	 * all'edificio prescelto
@@ -107,7 +122,8 @@ public class MeterAcquaStats extends Tools {
 	 * @param month
 	 * @return
 	 */
-	private List<MeterAcqua> getMonthList(int year, int month) {	
+	public List<MeterAcqua> getMonthList(int year, int month) {
+
 		List<Date> dates = new Tools().monthDates(year, month);
 		List<MeterAcqua> list = queryList(dates.get(0), dates.get(1));
 		return list;
@@ -122,7 +138,8 @@ public class MeterAcquaStats extends Tools {
 	 * @param date
 	 * @return
 	 */
-	private List<MeterAcqua> getWeekList(int year, int month, int date) {	
+	private List<MeterAcqua> getWeekList(int year, int month, int date) {
+
 		List<Date> dates = new Tools().weekDates(year, month, date);
 		List<MeterAcqua> list = queryList(dates.get(0), dates.get(1));
 		return list;

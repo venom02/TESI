@@ -30,7 +30,7 @@ import com.rigers.db.MeterAcqua;
 import com.rigers.db.MeterRipartitoreCalore;
 import com.rigers.db.MeterSonde;
 
-public class StatsGUI {
+public class UserUI {
 
 	protected Shell shell;
 	private Composite composite;
@@ -153,7 +153,7 @@ public class StatsGUI {
 	 */
 	public static void main(String[] args) {
 		try {
-			StatsGUI window = new StatsGUI();
+			UserUI window = new UserUI();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1044,12 +1044,12 @@ public class StatsGUI {
 	}
 
 	protected void buttonGoActions() {
-		meterAcquaTab();
-		meterRipartitoreCaloreTab();
-		meterSondeTab();
+		getMeterAcquaData();
+		getMeterRipartitoreCalore();
+		getMeterSonde();
 	}
 
-	private void meterAcquaTab() {
+	private void getMeterAcquaData() {
 		MeterAcquaStats meterAcquaStats = new MeterAcquaStats(edificio);
 
 		MeterAcqua avgMon = meterAcquaStats.monthAverage(year, month);
@@ -1094,7 +1094,7 @@ public class StatsGUI {
 
 	}
 
-	private void meterRipartitoreCaloreTab() {
+	private void getMeterRipartitoreCalore() {
 		MeterRipartitoreCaloreStats meterRipCalStats = new MeterRipartitoreCaloreStats(
 				edificio);
 
@@ -1135,7 +1135,7 @@ public class StatsGUI {
 		listRipCal.setItems(meterRipCalStats.dayReadings(year, month, date));
 	}
 
-	private void meterSondeTab() {
+	private void getMeterSonde() {
 		MeterSondeStats meterSondeStats = new MeterSondeStats(edificio);
 
 		MeterSonde avgMonth = meterSondeStats.monthAverage(year, month);

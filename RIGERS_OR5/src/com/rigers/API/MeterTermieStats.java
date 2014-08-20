@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.rigers.db.Edificio;
+import com.rigers.db.MeterAcqua;
 import com.rigers.db.MeterTermie;
 import com.rigers.persistence.HibernateUtil;
 
@@ -141,16 +142,8 @@ public class MeterTermieStats extends Tools {
 	 * @return
 	 */
 	private List<MeterTermie> getMonthList(int year, int month) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-		Date dateTo = cal.getTime();
-		cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
-		Date dateFrom = cal.getTime();
-
-		List<MeterTermie> list = queryList(dateFrom, dateTo);
-
+		List<Date> dates = new Tools().monthDates(year, month);
+		List<MeterTermie> list = queryList(dates.get(0), dates.get(1));
 		return list;
 	}
 
@@ -163,13 +156,8 @@ public class MeterTermieStats extends Tools {
 	 * @return
 	 */
 	private List<MeterTermie> getDayList(int year, int month, int date) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month, date, 0, 0, 0);
-		Date dateFrom = cal.getTime();
-		cal.add(Calendar.DATE, 1);
-		Date dateTo = cal.getTime();
-
-		List<MeterTermie> list = queryList(dateFrom, dateTo);
+		List<Date> dates = new Tools().dayDates(year, month, date);
+		List<MeterTermie> list = queryList(dates.get(0), dates.get(1));
 		return list;
 	}
 
@@ -183,16 +171,8 @@ public class MeterTermieStats extends Tools {
 	 * @return
 	 */
 	private List<MeterTermie> getWeekList(int year, int month, int date) {
-		// Get calendar set to given date and time
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month, date);
-		// Set the calendar to monday and sunday of the given week
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		Date dateFrom = cal.getTime();
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		Date dateTo = cal.getTime();
-
-		List<MeterTermie> list = queryList(dateFrom, dateTo);
+		List<Date> dates = new Tools().weekDates(year, month, date);
+		List<MeterTermie> list = queryList(dates.get(0), dates.get(1));
 		return list;
 	}
 

@@ -16,7 +16,7 @@ import com.rigers.API.DataView;
 import com.rigers.db.Edificio;
 import com.rigers.persistence.HibernateUtil;
 
-public class ShowEdifWindow {
+public class EdifListWindow {
 	private static class ContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object inputElement) {
 			return new Object[0];
@@ -39,7 +39,7 @@ public class ShowEdifWindow {
 	 */
 	public static void main(String[] args) {
 		try {
-			ShowEdifWindow window = new ShowEdifWindow();
+			EdifListWindow window = new EdifListWindow();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();

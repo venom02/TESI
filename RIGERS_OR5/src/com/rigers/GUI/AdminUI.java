@@ -30,7 +30,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import com.rigers.API.DataInsert;
 import com.rigers.API.DataView;
 
-public class GUI {
+public class AdminUI {
 	protected Shell shlRigers;
 	private Text txtCompartimento;
 	private Text textIndirizzoEdificio;
@@ -81,7 +81,7 @@ public class GUI {
 	 */
 	public static void main(String[] args) {
 		try {
-			GUI window = new GUI();
+			AdminUI window = new AdminUI();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -354,7 +354,7 @@ public class GUI {
 		btnMostraCompartimenti.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ShowCompWindow.main(null);
+				CompListWindow.main(null);
 			}
 		});
 		btnMostraCompartimenti.setLayoutData(new GridData(SWT.CENTER,
@@ -368,7 +368,7 @@ public class GUI {
 		btnMostraEdifici.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ShowEdifWindow.main(null);
+				EdifListWindow.main(null);
 			}
 		});
 		new Label(grpFilters, SWT.NONE);

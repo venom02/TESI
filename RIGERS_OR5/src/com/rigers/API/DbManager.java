@@ -48,9 +48,9 @@ public class DbManager {
 
 			flushTables(session);
 
-			fillCompartimento(session, 20);
+			fillCompartimento(session, 5);
 
-			fillEdificio(session, 20);
+			fillEdificio(session, 10);
 
 			tx.commit();
 		} catch (Exception e) {
