@@ -24,17 +24,17 @@ import com.rigers.persistence.HibernateUtil;
 public class Main {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		// GUI.main(null);
-//		UserUI.main(null);
-		fillDb();
+		AdminUI.main(null);
+		UserUI.main(null);
+//		fillMonth(0);
+//		fillMonth(1);
+//		fillDb();
 		System.exit(0);
 	}
 
-	public static void fillMonth(int id) {
-		Edificio edificio = new Edificio();
-		edificio.setIdEdificio(id);
-		DbManager db = new DbManager(edificio);
-		db.fillMonth(1);
+	public static void fillMonth(int month) {
+		DbManager db = new DbManager();
+		db.fillMonth(month);
 	};
 
 	public static void fillDb() {

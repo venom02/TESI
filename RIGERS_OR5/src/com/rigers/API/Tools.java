@@ -39,9 +39,10 @@ public class Tools {
 		System.out.println(marks.size());
 		if (!marks.isEmpty()) {
 			for (Integer mark : marks) {
-				if (mark != null) {
+					if(mark==null){
+						mark=0;
+					}
 					sum += mark;
-				}
 			}
 			return sum / marks.size();
 		}

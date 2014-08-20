@@ -26,12 +26,6 @@ import com.rigers.API.Tools;
 
 public class DbManager {
 
-	Edificio edificio;
-
-	public DbManager(Edificio edificio) {
-		this.edificio = edificio;
-	}
-
 	public DbManager() {
 
 	}
@@ -50,7 +44,7 @@ public class DbManager {
 
 			fillCompartimento(session, 5);
 
-			fillEdificio(session, 10);
+			fillEdificio(session, 5);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -70,14 +64,19 @@ public class DbManager {
 		try {
 			tx = session.beginTransaction();
 
+			List<Edificio> ediList = session.createQuery("from Edificio")
+					.list();
+
 			Calendar cal = new GregorianCalendar(2014, month, 1);
 			// per ogni giorno del mese inserisce una lettura ogni 6 ore
 			while (cal.get(Calendar.DATE) < 30) {
-				fillLetturaAcqua(session, cal.getTime());
-				fillLetturaSonde(session, cal.getTime());
-				fillLetturaRipartitoreCalore(session, cal.getTime());
+				fillLetturaAcqua(session, ediList.get(0), cal.getTime());
+				fillLetturaSonde(session, ediList.get(0), cal.getTime());
+				fillLetturaRipartitoreCalore(session, ediList.get(0),
+						cal.getTime());
 				cal.add(Calendar.DATE, 1);
-				if (cal.get(Calendar.MONTH) == 1 && cal.get(Calendar.DATE)==29) {
+				if (cal.get(Calendar.MONTH) == 1
+						&& cal.get(Calendar.DATE) == 29) {
 					break;
 				}
 			}
@@ -98,9 +97,10 @@ public class DbManager {
 	 * esistente
 	 * 
 	 * @param session
+	 * @param edificio
 	 * @param date
 	 */
-	private void fillLetturaSonde(Session session, Date date) {
+	private void fillLetturaSonde(Session session, Edificio edificio, Date date) {
 		int idMeter = 4; // Id meter sonde sempre uguale a 4;
 
 		// Generatore Valori Casuali
@@ -116,8 +116,10 @@ public class DbManager {
 		meterSonde.setIdLettura(lettDisp.getIdLettura());
 		meterSonde.setLuminosita(generator.nextInt(10));
 		meterSonde.setSismografo(generator.nextInt(100));
-		meterSonde.setTempEsterna(generator.nextInt(40));
+		meterSonde.setTempEsterna(generator.nextInt(35));
 		meterSonde.setTempLocali(generator.nextInt(7) + 18);
+		meterSonde.setTempGiorno(generator.nextInt(7) + 18);
+		meterSonde.setSolarimetro(generator.nextInt(100));
 		session.save(meterSonde);
 	}
 
@@ -126,11 +128,10 @@ public class DbManager {
 	 * edificio esistente
 	 * 
 	 * @param session
+	 * @param edificio
 	 */
-	private void fillLetturaAcqua(Session session, Date date) {
+	private void fillLetturaAcqua(Session session, Edificio edificio, Date date) {
 		int idMeter = 0; // Id meter acqua sempre uguale a 0;
-
-		List<Edificio> ediList = session.createQuery("from Edificio").list();
 
 		// Generatore Valori Casuali
 		Random generator = new Random();
@@ -153,25 +154,24 @@ public class DbManager {
 	 * edificio esistente
 	 * 
 	 * @param session
+	 * @param edificio
 	 */
-	private void fillLetturaRipartitoreCalore(Session session, Date date) {
+	private void fillLetturaRipartitoreCalore(Session session,
+			Edificio edificio, Date date) {
 		int idMeter = 3; // ogni Meter Ripartitore Calore ha id = 3
-
-		List<Edificio> ediList = session.createQuery("from Edificio").list();
 
 		// Valori Casuali Unita di consumo
 		Random unitaConsumo = new Random();
 
-		for (int i = 0; i < ediList.size(); i++) {
-			LetturaDispositivo lettDisp = generateLettura(session, idMeter,
-					ediList.get(i), date);
+		LetturaDispositivo lettDisp = generateLettura(session, idMeter,
+				edificio, date);
 
-			// INSERT Meter Ripartitore Calore
-			MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
-					lettDisp, unitaConsumo.nextInt(500));
-			ripMeterRipCal.setIdLettura(lettDisp.getIdLettura());
-			session.save(ripMeterRipCal);
-		}
+		// INSERT Meter Ripartitore Calore
+		MeterRipartitoreCalore ripMeterRipCal = new MeterRipartitoreCalore(
+				lettDisp, unitaConsumo.nextInt(500));
+		ripMeterRipCal.setIdLettura(lettDisp.getIdLettura());
+		session.save(ripMeterRipCal);
+
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class DbManager {
 	 * @return
 	 * 
 	 */
-	private LetturaDispositivo generateLettura(Session session,
+	private LetturaDispositivo generateRandomLettura(Session session,
 			int idDispositivo, Edificio edificio) {
 
 		// generazione Random Data
@@ -228,9 +228,13 @@ public class DbManager {
 	 * 
 	 * @param session
 	 */
-	private void flushTables(Session session) {
+	public void flushTables(Session session) {
 		Query q = null;
 
+		q = session.createQuery("delete from MeterSonde");
+		q.executeUpdate();
+		q = session.createQuery("delete from MeterAcqua");
+		q.executeUpdate();
 		q = session.createQuery("delete from MeterRipartitoreCalore");
 		q.executeUpdate();
 		q = session.createQuery("delete from LetturaDispositivo");
