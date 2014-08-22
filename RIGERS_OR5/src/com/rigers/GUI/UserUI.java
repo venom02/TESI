@@ -1,30 +1,29 @@
 package com.rigers.GUI;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.*;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 
 import com.rigers.API.DataView;
-import com.rigers.API.MeterAcquaStats;
-import com.rigers.API.MeterRipartitoreCaloreStats;
-import com.rigers.API.MeterSondeStats;
+import com.rigers.API.stats.MeterAcquaStats;
+import com.rigers.API.stats.MeterRipartitoreCaloreStats;
+import com.rigers.API.stats.MeterSondeStats;
 import com.rigers.db.Edificio;
 import com.rigers.db.MeterAcqua;
 import com.rigers.db.MeterRipartitoreCalore;
@@ -145,6 +144,7 @@ public class UserUI {
 	private List listMeterSonde;
 	private ScrolledComposite scrolled_composite_2;
 	private TabFolder tabResults;
+	private Composite chartComp;
 
 	/**
 	 * Launch the application.
@@ -272,12 +272,10 @@ public class UserUI {
 				1, 1));
 
 		tabMeterAcqua();
-		
-		tabMeterRipartitoreCalore();
-		
-		tabMeterSonde();
 
-		
+		tabMeterRipartitoreCalore();
+
+		tabMeterSonde();
 
 		TabItem tbtmMeterTermie = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterTermie.setText("Meter Termie");
@@ -298,7 +296,7 @@ public class UserUI {
 		scrolled_composite_2.setExpandHorizontal(true);
 		scrolled_composite_2.setExpandVertical(true);
 
-		Composite composite_2 = new Composite(tabResults, SWT.NONE);
+		Composite composite_2 = new Composite(tabResults, SWT.V_SCROLL);
 		composite_2.setLayout(new GridLayout(5, false));
 		new Label(composite_2, SWT.NONE);
 		new Label(composite_2, SWT.NONE);
@@ -737,119 +735,119 @@ public class UserUI {
 		TabItem tbtmMeterRipartitoreCalore = new TabItem(tabResults, SWT.NONE);
 		tbtmMeterRipartitoreCalore.setText("Meter Ripartitore Calore");
 
-		Composite composite_1 = new Composite(tabResults, SWT.NONE);
-		tbtmMeterRipartitoreCalore.setControl(composite_1);
-		composite_1.setLayout(new GridLayout(5, false));
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
+		Composite compRipCal = new Composite(tabResults, SWT.NONE);
+		tbtmMeterRipartitoreCalore.setControl(compRipCal);
+		compRipCal.setLayout(new GridLayout(5, false));
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
 
-		Label label = new Label(composite_1, SWT.NONE);
+		Label label = new Label(compRipCal, SWT.NONE);
 		GridData gd_label = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,
 				1);
 		gd_label.widthHint = 100;
 		label.setLayoutData(gd_label);
 		label.setText("Media");
 
-		Label label_1 = new Label(composite_1, SWT.NONE);
+		Label label_1 = new Label(compRipCal, SWT.NONE);
 		GridData gd_label_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false,
 				1, 1);
 		gd_label_1.widthHint = 100;
 		label_1.setLayoutData(gd_label_1);
 		label_1.setText("Max");
 
-		Label label_2 = new Label(composite_1, SWT.NONE);
+		Label label_2 = new Label(compRipCal, SWT.NONE);
 		GridData gd_label_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false,
 				1, 1);
 		gd_label_2.widthHint = 100;
 		label_2.setLayoutData(gd_label_2);
 		label_2.setText("Min");
 
-		Label lblUnitaConsumo = new Label(composite_1, SWT.NONE);
+		Label lblUnitaConsumo = new Label(compRipCal, SWT.NONE);
 		lblUnitaConsumo.setText("Unita Consumo");
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
 
-		Label label_4 = new Label(composite_1, SWT.NONE);
+		Label label_4 = new Label(compRipCal, SWT.NONE);
 		GridData gd_label_4 = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
 				1, 1);
 		gd_label_4.widthHint = 100;
 		label_4.setLayoutData(gd_label_4);
 		label_4.setText("Mese");
 
-		textUCavgMonth = new Text(composite_1, SWT.BORDER);
+		textUCavgMonth = new Text(compRipCal, SWT.BORDER);
 		textUCavgMonth.setEditable(false);
 		textUCavgMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCmaxMonth = new Text(composite_1, SWT.BORDER);
+		textUCmaxMonth = new Text(compRipCal, SWT.BORDER);
 		textUCmaxMonth.setEditable(false);
 		textUCmaxMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCminMonth = new Text(composite_1, SWT.BORDER);
+		textUCminMonth = new Text(compRipCal, SWT.BORDER);
 		textUCminMonth.setEditable(false);
 		textUCminMonth.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		new Label(composite_1, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
 
-		Label label_5 = new Label(composite_1, SWT.NONE);
+		Label label_5 = new Label(compRipCal, SWT.NONE);
 		GridData gd_label_5 = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
 				1, 1);
 		gd_label_5.widthHint = 100;
 		label_5.setLayoutData(gd_label_5);
 		label_5.setText("Settimana");
 
-		textUCavgWeek = new Text(composite_1, SWT.BORDER);
+		textUCavgWeek = new Text(compRipCal, SWT.BORDER);
 		textUCavgWeek.setEditable(false);
 		textUCavgWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCmaxWeek = new Text(composite_1, SWT.BORDER);
+		textUCmaxWeek = new Text(compRipCal, SWT.BORDER);
 		textUCmaxWeek.setEditable(false);
 		textUCmaxWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCminWeek = new Text(composite_1, SWT.BORDER);
+		textUCminWeek = new Text(compRipCal, SWT.BORDER);
 		textUCminWeek.setEditable(false);
 		textUCminWeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		new Label(composite_1, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
 
-		Label label_6 = new Label(composite_1, SWT.NONE);
+		Label label_6 = new Label(compRipCal, SWT.NONE);
 		label_6.setText("Giorno");
 
-		textUCavgDay = new Text(composite_1, SWT.BORDER);
+		textUCavgDay = new Text(compRipCal, SWT.BORDER);
 		textUCavgDay.setEditable(false);
 		textUCavgDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCmaxDay = new Text(composite_1, SWT.BORDER);
+		textUCmaxDay = new Text(compRipCal, SWT.BORDER);
 		textUCmaxDay.setEditable(false);
 		textUCmaxDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		textUCminDay = new Text(composite_1, SWT.BORDER);
+		textUCminDay = new Text(compRipCal, SWT.BORDER);
 		textUCminDay.setEditable(false);
 		textUCminDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 
-		Label label_11 = new Label(composite_1, SWT.NONE);
+		Label label_11 = new Label(compRipCal, SWT.NONE);
 		label_11.setText("Letture del giorno");
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
-		new Label(composite_1, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
+		new Label(compRipCal, SWT.NONE);
 
-		listRipCal = new List(composite_1, SWT.BORDER | SWT.H_SCROLL
+		listRipCal = new List(compRipCal, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL);
 		GridData gd_listRipCal = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 5, 1);
 		gd_listRipCal.heightHint = 70;
 		listRipCal.setLayoutData(gd_listRipCal);
-		
+
 	}
 
 	private void tabMeterAcqua() {
@@ -1040,7 +1038,7 @@ public class UserUI {
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
 		new Label(compositeTabMeterAcqua, SWT.NONE);
-		
+
 	}
 
 	protected void buttonGoActions() {

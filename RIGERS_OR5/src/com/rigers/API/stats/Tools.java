@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.rigers.API;
+package com.rigers.API.stats;
 
 import java.util.ArrayList;
 import java.util.Calendar;

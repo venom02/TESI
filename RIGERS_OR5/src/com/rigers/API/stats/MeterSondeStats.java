@@ -1,4 +1,4 @@
-package com.rigers.API;
+package com.rigers.API.stats;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

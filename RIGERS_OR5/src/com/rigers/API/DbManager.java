@@ -22,7 +22,7 @@ import com.rigers.db.MeterAcqua;
 import com.rigers.db.MeterRipartitoreCalore;
 import com.rigers.db.MeterSonde;
 import com.rigers.persistence.HibernateUtil;
-import com.rigers.API.Tools;
+import com.rigers.API.stats.Tools;
 
 public class DbManager {
 

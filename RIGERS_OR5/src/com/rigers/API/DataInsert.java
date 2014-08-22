@@ -19,7 +19,7 @@ public class DataInsert {
 	 * @param idCompartimento
 	 *            String per ottimizzare l'inserimento tramite elemento Spinner.
 	 * @param nomeCompartimento
-	 * @return Boolean. ritorna true se l'inserimento Ã¨ andato a buon fine.
+	 * @return Boolean. ritorna true se l'inserimento e' andato a buon fine.
 	 */
 	public static boolean insertComp(String idCompartimento,
 			String nomeCompartimento) {
@@ -51,10 +51,15 @@ public class DataInsert {
 
 	/**
 	 * Inserisce un edificio nel database
-	 * @param idEdificio id dell'Edificio
-	 * @param indexCompartimento indice nella lista Compartimenti
-	 * @param indirizzo indirizzo dell'edificio
-	 * @return True se l'edificio non esiste e False se l'edificio è già esistente
+	 * 
+	 * @param idEdificio
+	 *            id dell'Edificio
+	 * @param indexCompartimento
+	 *            indice nella lista Compartimenti
+	 * @param indirizzo
+	 *            indirizzo dell'edificio
+	 * @return True se l'edificio non esiste e False se l'edificio è già
+	 *         esistente
 	 */
 	public static boolean insertEdificio(String idEdificio,
 			int indexCompartimento, String indirizzo) {
@@ -94,9 +99,13 @@ public class DataInsert {
 
 	/**
 	 * Inserisce una lettura in Ripartitore Calore
-	 * @param indexEdificio Indice della lista Edifici
-	 * @param date Data Inserimento
-	 * @param unitaConsumo Valore
+	 * 
+	 * @param indexEdificio
+	 *            Indice della lista Edifici
+	 * @param date
+	 *            Data Inserimento
+	 * @param unitaConsumo
+	 *            Valore
 	 * @return true
 	 */
 	public static boolean insertMeterRipCal(int indexEdificio, Date date,
@@ -104,7 +113,7 @@ public class DataInsert {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		int idMeter = 3; // ogni Meter Ripartitore Calore ha id = 3
-		
+
 		List<Edificio> ediList = session.createQuery("from Edificio").list();
 
 		LetturaDispositivo lettDisp = generateLettura(session, idMeter,
@@ -115,12 +124,23 @@ public class DataInsert {
 				lettDisp, unitaConsumo);
 		ripMeterRipCal.setIdLettura(lettDisp.getIdLettura());
 		session.save(ripMeterRipCal);
-		
+
 		session.getTransaction().commit();
 		return true;
 	}
-	
-	public static boolean insertMeterAcqua(int indexEdificio, Date date, int crvVal, int prvVal, Date prdVal ){
+
+	/**
+	 * Inserisce una lettura in Meter Acqua
+	 * 
+	 * @param indexEdificio
+	 * @param date
+	 * @param crvVal
+	 * @param prvVal
+	 * @param prdVal
+	 * @return
+	 */
+	public static boolean insertMeterAcqua(int indexEdificio, Date date,
+			int crvVal, int prvVal, Date prdVal) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		int idMeter = 0; // Id meter acqua sempre uguale a 0;
@@ -136,12 +156,75 @@ public class DataInsert {
 		meterAcqua.setCurrentReadoutValue(crvVal);
 		meterAcqua.setPeriodicReadoutValue(prvVal);
 		meterAcqua.setPeriodicReadingDate(prdVal);
-		
+
 		session.save(meterAcqua);
 		session.getTransaction().commit();
 		return true;
 	}
-		
+
+	/**
+	 * Inserisce una lettura in Meter Sonde
+	 * 
+	 * @param indexEdificio
+	 * @param date
+	 * @param lum
+	 * @param sis
+	 * @param tExt
+	 * @param tLoc
+	 * @param tDay
+	 * @param sol
+	 * @return
+	 */
+	public static boolean insertMeterSonde(int indexEdificio, Date date,
+			int lum, int sis, int tExt, int tLoc, int tDay, int sol) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		int idMeter = 4; // Id meter sonde sempre uguale a 4;
+
+		List<Edificio> ediList = session.createQuery("from Edificio").list();
+
+		LetturaDispositivo lettDisp = generateLettura(session, idMeter,
+				ediList.get(indexEdificio), date);
+
+		// INSERT Ripartitore Calore
+		MeterSonde meterSonde = new MeterSonde(lettDisp);
+		meterSonde.setIdLettura(lettDisp.getIdLettura());
+		meterSonde.setLuminosita(lum);
+		meterSonde.setSismografo(sis);
+		meterSonde.setTempEsterna(tExt);
+		meterSonde.setTempLocali(tLoc);
+		meterSonde.setTempGiorno(tDay);
+		meterSonde.setSolarimetro(sol);
+
+		session.save(meterSonde);
+		session.getTransaction().commit();
+		return true;
+	}
+
+	/**
+	 *  Inserisce una lettura in Meter Elettrico
+	 * @return
+	 */
+	public static boolean insertMeterElettrico() {
+		return true;
+	}
+
+	/**
+	 *  Inserisce una lettura in Meter Gas
+	 * @return
+	 */
+	public static boolean insertMeterGas() {
+		return true;
+	}
+
+	/**
+	 *  Inserisce una lettura in Meter Termie
+	 * @return
+	 */
+	public static boolean insertMeterTermie() {
+		return true;
+	}
+
 	/**
 	 * Genera una entry in LetturaDispositivo
 	 * 

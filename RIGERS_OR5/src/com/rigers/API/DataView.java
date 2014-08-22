@@ -133,6 +133,12 @@ public class DataView {
 		return lettItems;
 	}
 
+	/**
+	 * Lista di tutte le letture
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return
+	 */
 	public static String[] LettureItems(Date dateFrom, Date dateTo) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
